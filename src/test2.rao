@@ -5,33 +5,31 @@
     <AoCore index="0" sample_clock="sclk" trig_type="0" storage_depth="8192" window_num="1" capture_amount="8192" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
-            <Bus capture_enable="true" name="dal[21:18]">
-                <Signal>dal[21]</Signal>
-                <Signal>dal[20]</Signal>
-                <Signal>dal[19]</Signal>
-                <Signal>dal[18]</Signal>
+            <Bus capture_enable="true" name="dal_hi[5:0]">
+                <Signal>dal_hi[5]</Signal>
+                <Signal>dal_hi[4]</Signal>
+                <Signal>dal_hi[3]</Signal>
+                <Signal>dal_hi[2]</Signal>
+                <Signal>dal_hi[1]</Signal>
+                <Signal>dal_hi[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="dal[17:9]">
-                <Signal>dal[17]</Signal>
-                <Signal>dal[16]</Signal>
-                <Signal>dal[15]</Signal>
-                <Signal>dal[14]</Signal>
-                <Signal>dal[13]</Signal>
-                <Signal>dal[12]</Signal>
-                <Signal>dal[11]</Signal>
-                <Signal>dal[10]</Signal>
-                <Signal>dal[9]</Signal>
-            </Bus>
-            <Bus capture_enable="true" name="dal[8:0]">
-                <Signal>dal[8]</Signal>
-                <Signal>dal[7]</Signal>
-                <Signal>dal[6]</Signal>
-                <Signal>dal[5]</Signal>
-                <Signal>dal[4]</Signal>
-                <Signal>dal[3]</Signal>
-                <Signal>dal[2]</Signal>
-                <Signal>dal[1]</Signal>
-                <Signal>dal[0]</Signal>
+            <Bus capture_enable="true" name="dal_lo[15:0]">
+                <Signal>dal_lo[15]</Signal>
+                <Signal>dal_lo[14]</Signal>
+                <Signal>dal_lo[13]</Signal>
+                <Signal>dal_lo[12]</Signal>
+                <Signal>dal_lo[11]</Signal>
+                <Signal>dal_lo[10]</Signal>
+                <Signal>dal_lo[9]</Signal>
+                <Signal>dal_lo[8]</Signal>
+                <Signal>dal_lo[7]</Signal>
+                <Signal>dal_lo[6]</Signal>
+                <Signal>dal_lo[5]</Signal>
+                <Signal>dal_lo[4]</Signal>
+                <Signal>dal_lo[3]</Signal>
+                <Signal>dal_lo[2]</Signal>
+                <Signal>dal_lo[1]</Signal>
+                <Signal>dal_lo[0]</Signal>
             </Bus>
             <Signal capture_enable="true">ale_n</Signal>
             <Signal capture_enable="true">strb_n</Signal>
@@ -95,5 +93,114 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0010100001000101</GAO_ID>
+    <AoCore index="1" sample_clock="sclk" trig_type="0" storage_depth="2048" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+        <SignalList>
+            <Signal capture_enable="true">clk</Signal>
+            <Bus capture_enable="true" name="aio[3:0]">
+                <Signal>aio[3]</Signal>
+                <Signal>aio[2]</Signal>
+                <Signal>aio[1]</Signal>
+                <Signal>aio[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="bs[1:0]">
+                <Signal>bs[1]</Signal>
+                <Signal>bs[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="dal[21:18]" restorename="dal_hi[5:2]">
+                <Signal>dal_hi[5]</Signal>
+                <Signal>dal_hi[4]</Signal>
+                <Signal>dal_hi[3]</Signal>
+                <Signal>dal_hi[2]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="dal[17:9]" restorename="group_0[8:0]">
+                <Signal>dal_hi[1]</Signal>
+                <Signal>dal_hi[0]</Signal>
+                <Signal>dal_lo[15]</Signal>
+                <Signal>dal_lo[14]</Signal>
+                <Signal>dal_lo[13]</Signal>
+                <Signal>dal_lo[12]</Signal>
+                <Signal>dal_lo[11]</Signal>
+                <Signal>dal_lo[10]</Signal>
+                <Signal>dal_lo[9]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="dal[8:0]" restorename="dal_lo[8:0]">
+                <Signal>dal_lo[8]</Signal>
+                <Signal>dal_lo[7]</Signal>
+                <Signal>dal_lo[6]</Signal>
+                <Signal>dal_lo[5]</Signal>
+                <Signal>dal_lo[4]</Signal>
+                <Signal>dal_lo[3]</Signal>
+                <Signal>dal_lo[2]</Signal>
+                <Signal>dal_lo[1]</Signal>
+                <Signal>dal_lo[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">ale_n</Signal>
+            <Signal capture_enable="true">strb_n</Signal>
+            <Signal capture_enable="true">sctl_n</Signal>
+            <Signal capture_enable="true">bufctl_n</Signal>
+            <Bus capture_enable="true" name="gp_code[7:0]">
+                <Signal>gp_code[7]</Signal>
+                <Signal>gp_code[6]</Signal>
+                <Signal>gp_code[5]</Signal>
+                <Signal>gp_code[4]</Signal>
+                <Signal>gp_code[3]</Signal>
+                <Signal>gp_code[2]</Signal>
+                <Signal>gp_code[1]</Signal>
+                <Signal>gp_code[0]</Signal>
+            </Bus>
+        </SignalList>
+        <Triggers>
+            <Trigger index="0">
+                <SignalList>
+                    <Bus restorename="gp_code[7:0]">
+                        <Signal>gp_code[7]</Signal>
+                        <Signal>gp_code[6]</Signal>
+                        <Signal>gp_code[5]</Signal>
+                        <Signal>gp_code[4]</Signal>
+                        <Signal>gp_code[3]</Signal>
+                        <Signal>gp_code[2]</Signal>
+                        <Signal>gp_code[1]</Signal>
+                        <Signal>gp_code[0]</Signal>
+                    </Bus>
+                </SignalList>
+            </Trigger>
+            <Trigger index="1"/>
+            <Trigger index="2"/>
+            <Trigger index="3"/>
+            <Trigger index="4"/>
+            <Trigger index="5"/>
+            <Trigger index="6"/>
+            <Trigger index="7"/>
+            <Trigger index="8"/>
+            <Trigger index="9"/>
+            <Trigger index="10"/>
+            <Trigger index="11"/>
+            <Trigger index="12"/>
+            <Trigger index="13"/>
+            <Trigger index="14"/>
+            <Trigger index="15"/>
+        </Triggers>
+        <MatchUnits>
+            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="00000010" value1="00000000" trigger="0"/>
+            <MatchUnit index="1" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="4" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="5" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="6" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="7" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="8" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="9" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="10" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="11" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="12" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="13" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="14" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="15" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+        </MatchUnits>
+        <Expressions type="Dynamic" ex_implementation="1">
+            <Expression>M0</Expression>
+        </Expressions>
+    </AoCore>
+    <GAO_ID>1100011101100100</GAO_ID>
 </GAO_CONFIG>
