@@ -13,24 +13,6 @@
                 <Signal>dal_hi[1]</Signal>
                 <Signal>dal_hi[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="dal_lo[15:0]">
-                <Signal>dal_lo[15]</Signal>
-                <Signal>dal_lo[14]</Signal>
-                <Signal>dal_lo[13]</Signal>
-                <Signal>dal_lo[12]</Signal>
-                <Signal>dal_lo[11]</Signal>
-                <Signal>dal_lo[10]</Signal>
-                <Signal>dal_lo[9]</Signal>
-                <Signal>dal_lo[8]</Signal>
-                <Signal>dal_lo[7]</Signal>
-                <Signal>dal_lo[6]</Signal>
-                <Signal>dal_lo[5]</Signal>
-                <Signal>dal_lo[4]</Signal>
-                <Signal>dal_lo[3]</Signal>
-                <Signal>dal_lo[2]</Signal>
-                <Signal>dal_lo[1]</Signal>
-                <Signal>dal_lo[0]</Signal>
-            </Bus>
             <Signal capture_enable="true">ale_n</Signal>
             <Signal capture_enable="true">strb_n</Signal>
             <Bus capture_enable="true" name="aio[3:0]">
@@ -48,6 +30,24 @@
             <Signal capture_enable="true">bufctl_n</Signal>
             <Signal capture_enable="true">sctl_n</Signal>
             <Signal capture_enable="true">proc_n</Signal>
+            <Bus capture_enable="false" name="dal_lo[15:0]">
+                <Signal>dal_lo[15]</Signal>
+                <Signal>dal_lo[14]</Signal>
+                <Signal>dal_lo[13]</Signal>
+                <Signal>dal_lo[12]</Signal>
+                <Signal>dal_lo[11]</Signal>
+                <Signal>dal_lo[10]</Signal>
+                <Signal>dal_lo[9]</Signal>
+                <Signal>dal_lo[8]</Signal>
+                <Signal>dal_lo[7]</Signal>
+                <Signal>dal_lo[6]</Signal>
+                <Signal>dal_lo[5]</Signal>
+                <Signal>dal_lo[4]</Signal>
+                <Signal>dal_lo[3]</Signal>
+                <Signal>dal_lo[2]</Signal>
+                <Signal>dal_lo[1]</Signal>
+                <Signal>dal_lo[0]</Signal>
+            </Bus>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -148,6 +148,10 @@
                 <Signal>gp_code[1]</Signal>
                 <Signal>gp_code[0]</Signal>
             </Bus>
+            <Signal capture_enable="true">map_n</Signal>
+            <Signal capture_enable="true">nxm</Signal>
+            <Signal capture_enable="true">nxm_n</Signal>
+            <Signal capture_enable="true">abort_n</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -202,5 +206,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1100011101100100</GAO_ID>
+    <GAO_ID>0001010010111100</GAO_ID>
 </GAO_CONFIG>
