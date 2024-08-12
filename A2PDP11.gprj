@@ -8,6 +8,7 @@
         <File path="src/gowin_rpll/gowin_rpll.v" type="file.verilog" enable="1"/>
         <File path="src/top.sv" type="file.verilog" enable="1"/>
         <File path="src/pins.cst" type="file.cst" enable="1"/>
-        <File path="src/test2.rao" type="file.gao" enable="1"/>
+        <File path="src/test2.rao" type="file.gao" enable="0"/>
+        <File path="src/test5.rao" type="file.gao" enable="1"/>
     </FileList>
 </Project>
