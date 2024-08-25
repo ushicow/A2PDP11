@@ -5,15 +5,13 @@
 //Part Number: GW1NR-LV9QN88PC6/I5
 //Device: GW1NR-9
 //Device Version: C
-//Created Time: Sun Aug 25 13:10:23 2024
+//Created Time: Sun Aug 25 13:10:09 2024
 
 //Change the instance name and port connections to the signal names
 //--------Copy here to design--------
 
-    Gowin_rPLL your_instance_name(
-        .clkout(clkout), //output clkout
-        .clkoutd(clkoutd), //output clkoutd
-        .clkin(clkin) //input clkin
+    Gowin_OSC your_instance_name(
+        .oscout(oscout) //output oscout
     );
 
 //--------Copy end-------------------

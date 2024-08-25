@@ -5,10 +5,15 @@
     <Version>5</Version>
     <Device name="GW1NR-9C" pn="GW1NR-LV9QN88PC6/I5">gw1nr9c-004</Device>
     <FileList>
+        <File path="src/gowin_osc/gowin_osc.v" type="file.verilog" enable="1"/>
         <File path="src/gowin_rpll/gowin_rpll.v" type="file.verilog" enable="1"/>
         <File path="src/top.sv" type="file.verilog" enable="1"/>
-        <File path="src/pins.cst" type="file.cst" enable="1"/>
+        <File path="src/pin6.cst" type="file.cst" enable="1"/>
+        <File path="src/pins.cst" type="file.cst" enable="0"/>
+        <File path="src/A2PDP11.sdc" type="file.sdc" enable="1"/>
         <File path="src/test2.rao" type="file.gao" enable="0"/>
-        <File path="src/test5.rao" type="file.gao" enable="1"/>
+        <File path="src/test5.rao" type="file.gao" enable="0"/>
+        <File path="src/test6.rao" type="file.gao" enable="1"/>
+        <File path="src/test6ale.rao" type="file.gao" enable="0"/>
     </FileList>
 </Project>
