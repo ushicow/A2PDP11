@@ -4,6 +4,7 @@
 // TEST4 2024.08.07 NXM abort signal
 // TEST5 2024.08.12 Console ODT output
 // TEST6 2024.08.25 Console ODT input
+// TEST7 2024.08.26 2KB RAM
 `default_nettype none
 
 module top ( 
@@ -27,13 +28,12 @@ module top (
 logic clk72;
 logic clk36;
 logic sclk;
-Gowin_rPLL your_instance_name(
+Gowin_rPLL rpll(
     .clkout(clk72), //output clkout
     .clkoutd(clk36), //output clkoutd
     .clkin(mclk) //input clkin
 );
 assign sclk = clk36;
-
 
 // AIO CODE
 parameter NIO           = 4'b1111;  // internal operation only, no I/O
@@ -179,7 +179,8 @@ end
 
 logic [15:0] dal_out;
 logic [15:0] odt_out;
-assign dal_lo = bufctl_n ? 16'bz : dal_out | odt_out;
+logic [15:0] mem_out;
+assign dal_lo = bufctl_n ? 16'bz : dal_out | odt_out | mem_out;
 
 always_ff@(negedge bufctl_n) begin
     if ((maio == DATA_READ) && (mbs == BS_EXT)) begin
@@ -194,6 +195,50 @@ always_ff@(negedge bufctl_n) begin
         end
     end else begin
         odt_out <= 16'bz;
+    end
+end
+
+logic [15:0] dout;
+logic [15:0] din;
+logic [9:0] ram_ad;
+logic wre;
+Gowin_RAM16S ram(
+    .dout(dout), //output [15:0] dout
+    .wre(wre), //input wre
+    .ad(ram_ad), //input [9:0] ad
+    .di(din), //input [15:0] di
+    .clk(clk) //input clk
+);
+
+always_ff@(negedge clk) begin
+    if ((mbs == BS_MEM) && (!maio[2]) &&(mdal < 22'o4000)) begin
+        ram_ad <= mdal[10:1];
+        mem_out <= dout;
+    end else begin
+        mem_out <= 16'bz;
+    end
+end
+
+always_ff@(negedge clk) begin
+    if ((mbs == BS_MEM) && (mdal < 22'o4000) && (!maio[2]) && (!sctl_n)) begin
+        wre <= 1'b1;
+    end else begin
+        wre <= 1'b0;
+    end
+end
+
+always_ff@(negedge sctl_n) begin
+    if ((mbs == BS_MEM) && (mdal < 22'o4000) && (maio[3:2] == 2'b00)) begin
+        if (maio == BYTE_WRITE) begin
+            if (mdal[0] == 0) begin
+                din <= {dout[15:8], dal_lo[7:0]};
+            end else begin
+                din <= {dal_lo[15:8], dout[7:0]};
+            end
+        end
+        if (maio == WORD_WRITE) begin
+            din <= dal_lo;
+        end
     end
 end
 
