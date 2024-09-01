@@ -11,4 +11,4 @@
 -type OSC
 -file_type vlg
 -dev_type GW1NR-9C
--freq_div 4
+-freq_div 2

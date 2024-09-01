@@ -9,7 +9,7 @@ version=1.0
 [Config]
 CKLOUTD3=false
 CLKFB_SOURCE=0
-CLKIN_FREQ=27
+CLKIN_FREQ=18
 CLKOUTD=true
 CLKOUTP=false
 CLKOUT_BYPASS=false

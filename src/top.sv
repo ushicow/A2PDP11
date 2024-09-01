@@ -1,3 +1,4 @@
+`default_nettype none
 // DCJ11 TangNano interface
 // TEST2 2024.07.28 Bus read, nanja.info
 // TSET3 2024.08.03 Start-Up config, nanja.info
@@ -5,35 +6,33 @@
 // TEST5 2024.08.12 Console ODT output
 // TEST6 2024.08.25 Console ODT input
 // TEST7 2024.08.26 2KB RAM
-`default_nettype none
+// TEST8 2024.08.31 4MB RAM
 
 module top ( 
-    inout wire [15:0] dal_lo,   // DAL<15:0>
-    input wire [5:0] dal_hi,    // DAL<21:16>
-    input wire [1:0] bs,        // BS<1:0>
+    inout wire [15:0] dal,      // DAL<21:0>, BS<1:0>
     input wire [3:0] aio,       // AIO<3:0>
     input wire bufctl_n,
     input wire ale_n,
     output wire nxm_n,
     input wire sctl_n,
     input wire clk,
-    input wire rrdy,            // Ready to read from DJC11's ODT data
-    output reg rstb,            // Strobe for read from DJC11's ODT data
-    input wire wrdy,            // Ready to write to DJC11's ODT data
-    output reg wstb,            // Strobe for write to DJC11's ODT data
+    output reg dv,
+    output reg miss_n,
+    output reg dallo_oe_n,
+    output reg dalhi_oe_n,
+    input wire rrdy,            // Ready to read from DCJ11's ODT data
+    output reg rstb,            // Strobe for read from DCJ11's ODT data
+    input wire wrdy,            // Ready to write to DCJ11's ODT data
+    output reg wstb,            // Strobe for write to DCJ11's ODT data
     inout wire [7:0] ad,        // ODT data
+    output wire [1:0] O_psram_ck,
+    output wire [1:0] O_psram_ck_n,
+    inout wire [15:0] IO_psram_dq,
+    inout wire [1:0] IO_psram_rwds,
+    output wire [1:0] O_psram_cs_n,
+    output wire [1:0] O_psram_reset_n,
     input wire mclk
 );
-
-logic clk72;
-logic clk36;
-logic sclk;
-Gowin_rPLL rpll(
-    .clkout(clk72), //output clkout
-    .clkoutd(clk36), //output clkoutd
-    .clkin(mclk) //input clkin
-);
-assign sclk = clk36;
 
 // AIO CODE
 parameter NIO           = 4'b1111;  // internal operation only, no I/O
@@ -65,32 +64,48 @@ parameter RBUF          = 22'o17777562; // Receiver Buffer Register
 parameter XCSR          = 22'o17777564; // Transmitter Control And Status Register
 parameter XBUF          = 22'o17777566; // Transmitter Buffer Register
 
-logic [7:0] gp_code;
-always_ff@(negedge ale_n) begin
-    if ((aio == GP_READ) || (aio == GP_WRITE)) begin
-        gp_code <= dal_lo[7:0];
-    end else begin
-        gp_code <= 8'b11111111;
-    end
-end
+logic clk_x4;   // clk x 4 = 72MHz
+logic clk_x2;   // clk x 2 = 36MHz
+Gowin_rPLL rpll(
+    .clkout(clk_x4), //output clkout
+    .clkoutd(clk_x2), //output clkoutd
+    .clkin(clk) //input clkin
+);
 
 logic [7:0] count;
-always_ff@(posedge clk) begin
-    if (!ale_n) begin
-        count <= count + 1'b1;
-    end else begin
-        count <= 0;
-    end
-end
-
+logic [15:0] mdallo;
 logic [21:0] mdal;
 logic [3:0] maio;
 logic [1:0] mbs;
-always_ff@(negedge ale_n) begin
-    if (count == 0) begin
-        mdal <= {dal_hi, dal_lo};
-        maio <= aio;
-        mbs <= bs;
+logic [7:0] gp_code;
+always_ff@(posedge clk_x2) begin
+    if (ale_n) begin
+        count <= 0;
+    end else begin
+        if (count == 7'd0) begin
+            dallo_oe_n <= 1'b1;
+            dalhi_oe_n <= 1'b0;
+            if ((aio == GP_READ) || (aio == GP_WRITE)) begin
+                gp_code <= dal[7:0];
+            end else begin
+                gp_code <= 8'b11111111;
+            end
+            mdallo <= dal;
+        end else if (count == 7'd1) begin
+            maio <= aio;
+            mbs[0] <= dal[6];
+            mbs[1] <= dal[7];
+            mdal[21] <= dal[8];
+            mdal[20] <= dal[0];
+            mdal[19] <= dal[9];
+            mdal[18] <= dal[10];
+            mdal[17] <= dal[11];
+            mdal[16] <= dal[12];
+            mdal[15:0] <= mdallo;
+            dallo_oe_n <= 1'b0;
+            dalhi_oe_n <= 1'b1;
+        end
+        count <= count + 1'b1;
     end
 end
 
@@ -103,13 +118,13 @@ always_ff@(negedge bufctl_n) begin
     end
 end
 
-logic nxm;
 assign nxm_n = sctl_n ? 1'b1 : !nxm;
+logic nxm;
 always_ff@(negedge sctl_n) begin
     if ((maio[3:2] == 2'b10) || (maio[3:2] == 2'b00)) begin
 //         RMW_BUSLOCK, RMW_NOLOCK, DATA_READ, DEMAND_READ, WORD_WRITE, BYTE_WRITE
         if (mbs == BS_MEM) begin
-            if (mdal[15:0] > 16'o157777) begin
+            if (mdal >= 22'o17760000) begin
                 nxm <= 1'b1;
             end
         end
@@ -138,7 +153,7 @@ always_ff@(negedge clk) begin
     if ((sctl_n == 0) && (mdal == XBUF)) begin
         rstb <= 1'b1;
         rxrdy <= 1'b0;
-        rdata <= dal_lo[7:0];
+        rdata <= dal[7:0];
     end else if (!rrdy1) begin
         rstb <= 1'b0;
     end else if (!rstb) begin
@@ -168,7 +183,7 @@ always_ff@(negedge clk) begin
         wdata <= ad;
         wstb <= 1'b0;
         wxrdy <= 1'b1;
-    end else if (mdal == RBUF) begin
+    end else if ((mdal == RBUF) && (!sctl_n)) begin
         wxrdy <= 1'b0;
     end
     if (gp_code == 8'o014) begin
@@ -180,7 +195,7 @@ end
 logic [15:0] dal_out;
 logic [15:0] odt_out;
 logic [15:0] mem_out;
-assign dal_lo = bufctl_n ? 16'bz : dal_out | odt_out | mem_out;
+assign dal = bufctl_n ? 16'bz : dal_out | odt_out | mem_out;
 
 always_ff@(negedge bufctl_n) begin
     if ((maio == DATA_READ) && (mbs == BS_EXT)) begin
@@ -198,47 +213,42 @@ always_ff@(negedge bufctl_n) begin
     end
 end
 
-logic [15:0] dout;
-logic [15:0] din;
-logic [9:0] ram_ad;
-logic wre;
-Gowin_RAM16S ram(
-    .dout(dout), //output [15:0] dout
-    .wre(wre), //input wre
-    .ad(ram_ad), //input [9:0] ad
-    .di(din), //input [15:0] di
-    .clk(clk) //input clk
+ram u_ram(
+    .*
 );
 
-always_ff@(negedge clk) begin
-    if ((mbs == BS_MEM) && (!maio[2]) &&(mdal < 22'o4000)) begin
-        ram_ad <= mdal[10:1];
-        mem_out <= dout;
+logic [21:0] ram_addr;
+logic [15:0] ram_rdata;
+logic [15:0] ram_wdata;
+logic ram_read;
+logic ram_write;
+logic ram_byte;
+always_ff@(posedge clk) begin
+    if ((mbs == BS_MEM) && (maio[2] == 1'b0)) begin
+        ram_addr <= mdal;
+        if (maio[3] == 1'b1) begin
+            miss_n <= (!ale_n && !bufctl_n) ? 1'b0 : 1'b1;
+            ram_read <= 1'b1;
+            mem_out <= ram_rdata;
+            dv <= !sctl_n; 
+        end
     end else begin
+        ram_read <= 1'b0;
         mem_out <= 16'bz;
     end
 end
 
-always_ff@(negedge clk) begin
-    if ((mbs == BS_MEM) && (mdal < 22'o4000) && (!maio[2]) && (!sctl_n)) begin
-        wre <= 1'b1;
+always_ff@(posedge clk) begin
+    if ((mbs == BS_MEM) && (maio[3:2] == 2'b00) && (!sctl_n)) begin
+        if (maio[1] == BYTE_WRITE) begin
+            ram_byte <= 1'b1;
+        end else begin
+            ram_byte <= 1'b0;
+        end;
+        ram_write <= 1'b1;
+        ram_wdata <= dal[15:0];
     end else begin
-        wre <= 1'b0;
-    end
-end
-
-always_ff@(negedge sctl_n) begin
-    if ((mbs == BS_MEM) && (mdal < 22'o4000) && (maio[3:2] == 2'b00)) begin
-        if (maio == BYTE_WRITE) begin
-            if (mdal[0] == 0) begin
-                din <= {dout[15:8], dal_lo[7:0]};
-            end else begin
-                din <= {dal_lo[15:8], dout[7:0]};
-            end
-        end
-        if (maio == WORD_WRITE) begin
-            din <= dal_lo;
-        end
+        ram_write <= 1'b0;
     end
 end
 

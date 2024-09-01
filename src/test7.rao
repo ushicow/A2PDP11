@@ -77,6 +77,7 @@
             <Signal capture_enable="true">sctl_n</Signal>
             <Signal capture_enable="true">ale_n</Signal>
             <Signal capture_enable="true">bufctl_n</Signal>
+            <Signal capture_enable="true">dallo_oe_n</Signal>
             <Signal capture_enable="false">mdal[21]</Signal>
             <Signal capture_enable="false">mdal[20]</Signal>
             <Signal capture_enable="false">mdal[19]</Signal>
@@ -145,5 +146,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1100011001000000</GAO_ID>
+    <GAO_ID>0010011010110100</GAO_ID>
 </GAO_CONFIG>

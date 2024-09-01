@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="clk72" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="0" sample_clock="sclk" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="mdal[21:0]">
@@ -29,24 +29,6 @@
                 <Signal>mdal[1]</Signal>
                 <Signal>mdal[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="dal_lo[15:0]">
-                <Signal>dal_lo[15]</Signal>
-                <Signal>dal_lo[14]</Signal>
-                <Signal>dal_lo[13]</Signal>
-                <Signal>dal_lo[12]</Signal>
-                <Signal>dal_lo[11]</Signal>
-                <Signal>dal_lo[10]</Signal>
-                <Signal>dal_lo[9]</Signal>
-                <Signal>dal_lo[8]</Signal>
-                <Signal>dal_lo[7]</Signal>
-                <Signal>dal_lo[6]</Signal>
-                <Signal>dal_lo[5]</Signal>
-                <Signal>dal_lo[4]</Signal>
-                <Signal>dal_lo[3]</Signal>
-                <Signal>dal_lo[2]</Signal>
-                <Signal>dal_lo[1]</Signal>
-                <Signal>dal_lo[0]</Signal>
-            </Bus>
             <Bus capture_enable="true" name="maio[3:0]">
                 <Signal>maio[3]</Signal>
                 <Signal>maio[2]</Signal>
@@ -57,11 +39,7 @@
                 <Signal>mbs[1]</Signal>
                 <Signal>mbs[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="count[7:0]">
-                <Signal>count[7]</Signal>
-                <Signal>count[6]</Signal>
-                <Signal>count[5]</Signal>
-                <Signal>count[4]</Signal>
+            <Bus capture_enable="true" name="count[3:0]">
                 <Signal>count[3]</Signal>
                 <Signal>count[2]</Signal>
                 <Signal>count[1]</Signal>
@@ -70,11 +48,58 @@
             <Signal capture_enable="true">ale_n</Signal>
             <Signal capture_enable="true">bufctl_n</Signal>
             <Signal capture_enable="true">sctl_n</Signal>
+            <Signal capture_enable="true">dallo_oe_n</Signal>
+            <Signal capture_enable="true">dalhi_oe_n</Signal>
+            <Bus capture_enable="true" name="dal[7:0]">
+                <Signal>dal[7]</Signal>
+                <Signal>dal[6]</Signal>
+                <Signal>dal[5]</Signal>
+                <Signal>dal[4]</Signal>
+                <Signal>dal[3]</Signal>
+                <Signal>dal[2]</Signal>
+                <Signal>dal[1]</Signal>
+                <Signal>dal[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">rxrdy</Signal>
+            <Signal capture_enable="true">rrdy</Signal>
+            <Signal capture_enable="true">rstb</Signal>
+            <Bus capture_enable="true" name="gp_code[7:0]">
+                <Signal>gp_code[7]</Signal>
+                <Signal>gp_code[6]</Signal>
+                <Signal>gp_code[5]</Signal>
+                <Signal>gp_code[4]</Signal>
+                <Signal>gp_code[3]</Signal>
+                <Signal>gp_code[2]</Signal>
+                <Signal>gp_code[1]</Signal>
+                <Signal>gp_code[0]</Signal>
+            </Bus>
+            <Signal capture_enable="false">nxm</Signal>
+            <Signal capture_enable="false">count[7]</Signal>
+            <Signal capture_enable="false">count[6]</Signal>
+            <Signal capture_enable="false">count[5]</Signal>
+            <Signal capture_enable="false">count[4]</Signal>
+            <Signal capture_enable="false">dal[15]</Signal>
+            <Signal capture_enable="false">dal[14]</Signal>
+            <Signal capture_enable="false">dal[13]</Signal>
+            <Signal capture_enable="false">dal[12]</Signal>
+            <Signal capture_enable="false">dal[11]</Signal>
+            <Signal capture_enable="false">dal[10]</Signal>
+            <Signal capture_enable="false">dal[9]</Signal>
+            <Signal capture_enable="false">dal[8]</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
                 <SignalList>
-                    <Signal>rxrdy</Signal>
+                    <Bus restorename="gp_code[7:0]">
+                        <Signal>gp_code[7]</Signal>
+                        <Signal>gp_code[6]</Signal>
+                        <Signal>gp_code[5]</Signal>
+                        <Signal>gp_code[4]</Signal>
+                        <Signal>gp_code[3]</Signal>
+                        <Signal>gp_code[2]</Signal>
+                        <Signal>gp_code[1]</Signal>
+                        <Signal>gp_code[0]</Signal>
+                    </Bus>
                 </SignalList>
             </Trigger>
             <Trigger index="1"/>
@@ -94,7 +119,7 @@
             <Trigger index="15"/>
         </Triggers>
         <MatchUnits>
-            <MatchUnit index="0" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="R" value1="0" trigger="0"/>
+            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="10011000" value1="00000000" trigger="0"/>
             <MatchUnit index="1" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
@@ -115,5 +140,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0111000110111000</GAO_ID>
+    <GAO_ID>1000011001011011</GAO_ID>
 </GAO_CONFIG>

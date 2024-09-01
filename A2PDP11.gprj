@@ -8,15 +8,19 @@
         <File path="src/gowin_osc/gowin_osc.v" type="file.verilog" enable="1"/>
         <File path="src/gowin_ram16s/gowin_ram16s.v" type="file.verilog" enable="1"/>
         <File path="src/gowin_rpll/gowin_rpll.v" type="file.verilog" enable="1"/>
-        <File path="src/gowin_sp/gowin_sp.v" type="file.verilog" enable="1"/>
+        <File path="src/gowin_rpll/gowin_rpll_ram.v" type="file.verilog" enable="1"/>
+        <File path="src/psram_memory_interface_hs_2ch_v2/psram_memory_interface_hs_2ch_v2.v" type="file.verilog" enable="1"/>
+        <File path="src/ram.sv" type="file.verilog" enable="1"/>
         <File path="src/top.sv" type="file.verilog" enable="1"/>
-        <File path="src/pin6.cst" type="file.cst" enable="1"/>
+        <File path="src/pin6.cst" type="file.cst" enable="0"/>
+        <File path="src/pin8.cst" type="file.cst" enable="1"/>
         <File path="src/pins.cst" type="file.cst" enable="0"/>
         <File path="src/A2PDP11.sdc" type="file.sdc" enable="1"/>
         <File path="src/test2.rao" type="file.gao" enable="0"/>
         <File path="src/test5.rao" type="file.gao" enable="0"/>
         <File path="src/test6.rao" type="file.gao" enable="0"/>
         <File path="src/test6ale.rao" type="file.gao" enable="0"/>
-        <File path="src/test7.rao" type="file.gao" enable="1"/>
+        <File path="src/test7.rao" type="file.gao" enable="0"/>
+        <File path="src/test8.rao" type="file.gao" enable="1"/>
     </FileList>
 </Project>

@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="mclk" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="0" sample_clock="clk_x4" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="mdal[15:0]">
@@ -44,16 +44,6 @@
             <Signal capture_enable="true">wrdy</Signal>
             <Signal capture_enable="true">wrdy1</Signal>
             <Signal capture_enable="true">wxrdy</Signal>
-            <Bus capture_enable="true" name="dal_lo[7:0]">
-                <Signal>dal_lo[7]</Signal>
-                <Signal>dal_lo[6]</Signal>
-                <Signal>dal_lo[5]</Signal>
-                <Signal>dal_lo[4]</Signal>
-                <Signal>dal_lo[3]</Signal>
-                <Signal>dal_lo[2]</Signal>
-                <Signal>dal_lo[1]</Signal>
-                <Signal>dal_lo[0]</Signal>
-            </Bus>
             <Bus capture_enable="true" name="ad[7:0]">
                 <Signal>ad[7]</Signal>
                 <Signal>ad[6]</Signal>
@@ -74,6 +64,18 @@
                 <Signal>wdata[1]</Signal>
                 <Signal>wdata[0]</Signal>
             </Bus>
+            <Bus capture_enable="true" name="dal[7:0]">
+                <Signal>dal[7]</Signal>
+                <Signal>dal[6]</Signal>
+                <Signal>dal[5]</Signal>
+                <Signal>dal[4]</Signal>
+                <Signal>dal[3]</Signal>
+                <Signal>dal[2]</Signal>
+                <Signal>dal[1]</Signal>
+                <Signal>dal[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">dallo_oe_n</Signal>
+            <Signal capture_enable="true">dalhi_oe_n</Signal>
             <Bus capture_enable="false" name="odt_stat[7:0]">
                 <Signal>odt_stat[7]</Signal>
                 <Signal>odt_stat[6]</Signal>
@@ -129,7 +131,7 @@
             <Trigger index="15"/>
         </Triggers>
         <MatchUnits>
-            <MatchUnit index="0" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="R" value1="0" trigger="0"/>
+            <MatchUnit index="0" enabled="1" match_type="1" counter_enable="1" counter_width="2" counter="2" countinuous="0" func="0" value0="R" value1="0" trigger="0"/>
             <MatchUnit index="1" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="R" value1="0" trigger="1"/>
             <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
@@ -151,5 +153,5 @@
             <Expression>M1</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0001100010011100</GAO_ID>
+    <GAO_ID>0100010000001000</GAO_ID>
 </GAO_CONFIG>
