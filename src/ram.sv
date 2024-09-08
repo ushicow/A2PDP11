@@ -1,6 +1,8 @@
 `default_nettype none
+// DCJ11 TangNano interface by nanja.info
 // PSRAM interface module
 // TEST8 2024.08.31 4MB RAM
+// TEST9 2026.09.03 Byte Data Write
 
 module ram (
     output wire [1:0] O_psram_ck,
@@ -114,7 +116,7 @@ always_ff@(posedge clk_out or negedge rst_n) begin
                 mcycle <= 1;
             end else if (wr1) begin
                 if (ram_byte) begin
-                    data_mask0 <= {ram_addr[0], !ram_addr[0], 2'b11};
+                    data_mask0 <= {!ram_addr[0], ram_addr[0], 2'b11};
                 end else begin
                     data_mask0 <= 4'b0011;
                 end
@@ -148,12 +150,8 @@ always_ff@(posedge clk_out or negedge rst_n) begin
 end
 
 always_ff@(posedge clk_out) begin
-    if (rd1) begin
-        if (rd_data_valid0 && (rcycle == 1'b0)) begin
-            ram_rdata <= rd_data0[31:16];
-        end
-    end else begin
-        ram_rdata <= 16'bz;
+    if (rd_data_valid0 && (rcycle == 1'b0)) begin
+        ram_rdata <= rd_data0[31:16];
     end
 end
 

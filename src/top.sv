@@ -1,12 +1,13 @@
 `default_nettype none
-// DCJ11 TangNano interface
-// TEST2 2024.07.28 Bus read, nanja.info
-// TSET3 2024.08.03 Start-Up config, nanja.info
+// DCJ11 TangNano interface by nanja.info
+// TEST2 2024.07.28 Bus read
+// TSET3 2024.08.03 Start-Up config
 // TEST4 2024.08.07 NXM abort signal
 // TEST5 2024.08.12 Console ODT output
 // TEST6 2024.08.25 Console ODT input
 // TEST7 2024.08.26 2KB RAM
 // TEST8 2024.08.31 4MB RAM
+// TEST9 2024.09.03 Byte Data Write
 
 module top ( 
     inout wire [15:0] dal,      // DAL<21:0>, BS<1:0>
@@ -38,7 +39,7 @@ module top (
 parameter NIO           = 4'b1111;  // internal operation only, no I/O
 parameter GP_READ       = 4'b1110;  // General-Purpose read
 parameter INTERRUPT_ACK = 4'b1101;  // Interrupt acknowledge, vector read
-parameter REQEST_READ   = 4'b1100;  // Instruction-stream request read
+parameter REQUEST_READ  = 4'b1100;  // Instruction-stream request read
 parameter RMW_NOLOCK    = 4'b1011;  // Read/Modify/Write - no bus lock
 parameter RMW_BUSLOCK   = 4'b1010;  // Read/Modify/Write - bus lock
 parameter DATA_READ     = 4'b1001;  // Data-stream read
@@ -224,31 +225,27 @@ logic ram_read;
 logic ram_write;
 logic ram_byte;
 always_ff@(posedge clk) begin
-    if ((mbs == BS_MEM) && (maio[2] == 1'b0)) begin
+    if (mbs == BS_MEM) begin
         ram_addr <= mdal;
-        if (maio[3] == 1'b1) begin
+        if ((maio[3:2] == 2'b10) || (maio == REQUEST_READ)) begin
             miss_n <= (!ale_n && !bufctl_n) ? 1'b0 : 1'b1;
-            ram_read <= 1'b1;
-            mem_out <= ram_rdata;
+            ram_read <= (!ale_n && !bufctl_n) ? 1'b1 : 1'b0;
+            mem_out <= (ale_n && !bufctl_n) ? ram_rdata : 16'bz;
             dv <= !sctl_n; 
         end
-    end else begin
-        ram_read <= 1'b0;
-        mem_out <= 16'bz;
     end
 end
 
 always_ff@(posedge clk) begin
     if ((mbs == BS_MEM) && (maio[3:2] == 2'b00) && (!sctl_n)) begin
-        if (maio[1] == BYTE_WRITE) begin
+        if (maio == BYTE_WRITE) begin
             ram_byte <= 1'b1;
-        end else begin
-            ram_byte <= 1'b0;
-        end;
+        end
         ram_write <= 1'b1;
         ram_wdata <= dal[15:0];
     end else begin
         ram_write <= 1'b0;
+        ram_byte <= 1'b0;
     end
 end
 
