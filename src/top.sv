@@ -65,6 +65,18 @@ parameter RBUF          = 22'o17777562; // Receiver Buffer Register
 parameter XCSR          = 22'o17777564; // Transmitter Control And Status Register
 parameter XBUF          = 22'o17777566; // Transmitter Buffer Register
 
+// PC11 Paper Tape Reader/Punch
+parameter PC11          = 19'o1777755;  // PC11 registers
+parameter PRS           = 22'o17777550; // Paper Tape Reader Status Register
+parameter PRB           = 22'o17777552; // Paper Tape Reader Buffer Register
+parameter PPS           = 22'o17777554; // Paper Tape Punch Status Register
+parameter PPB           = 22'o17777556; // Paper Tape Punch Buffer Register
+
+logic sclk;
+Gowin_OSC osc(
+    .oscout(sclk) //output oscout
+);
+
 logic clk_x4;   // clk x 4 = 72MHz
 logic clk_x2;   // clk x 2 = 36MHz
 Gowin_rPLL rpll(
@@ -83,30 +95,33 @@ always_ff@(posedge clk_x2) begin
     if (ale_n) begin
         count <= 0;
     end else begin
-        if (count == 7'd0) begin
-            dallo_oe_n <= 1'b1;
-            dalhi_oe_n <= 1'b0;
-            if ((aio == GP_READ) || (aio == GP_WRITE)) begin
-                gp_code <= dal[7:0];
-            end else begin
-                gp_code <= 8'b11111111;
-            end
-            mdallo <= dal;
-        end else if (count == 7'd1) begin
-            maio <= aio;
-            mbs[0] <= dal[6];
-            mbs[1] <= dal[7];
-            mdal[21] <= dal[8];
-            mdal[20] <= dal[0];
-            mdal[19] <= dal[9];
-            mdal[18] <= dal[10];
-            mdal[17] <= dal[11];
-            mdal[16] <= dal[12];
-            mdal[15:0] <= mdallo;
-            dallo_oe_n <= 1'b0;
-            dalhi_oe_n <= 1'b1;
-        end
         count <= count + 1'b1;
+    end
+end
+
+always_ff@(negedge clk_x2) begin
+    if (count == 8'd1) begin
+        dallo_oe_n <= 1'b1;
+        dalhi_oe_n <= 1'b0;
+        if ((aio == GP_READ) || (aio == GP_WRITE)) begin
+            gp_code <= dal[7:0];
+        end else begin
+            gp_code <= 8'b11111111;
+        end
+        mdallo <= dal;
+    end else if (count == 8'd2) begin
+        maio <= aio;
+        mbs[0] <= dal[6];
+        mbs[1] <= dal[7];
+        mdal[21] <= dal[8];
+        mdal[20] <= dal[0];
+        mdal[19] <= dal[9];
+        mdal[18] <= dal[10];
+        mdal[17] <= dal[11];
+        mdal[16] <= dal[12];
+        mdal[15:0] <= mdallo;
+        dallo_oe_n <= 1'b0;
+        dalhi_oe_n <= 1'b1;
     end
 end
 
@@ -130,7 +145,7 @@ always_ff@(negedge sctl_n) begin
             end
         end
         if (mbs == BS_EXT) begin
-            if (mdal[21:3] == DLART) begin
+            if ((mdal[21:3] == DLART) || (mdal[21:3] == PC11)) begin
                 nxm <= 1'b0;
             end else begin
                 nxm <= 1'b1;
@@ -200,15 +215,15 @@ assign dal = bufctl_n ? 16'bz : dal_out | odt_out | mem_out;
 
 always_ff@(negedge bufctl_n) begin
     if ((maio == DATA_READ) && (mbs == BS_EXT)) begin
-        if (mdal == RCSR) begin 
-            odt_out <= {8'b0, wxrdy, 7'b0};
-        end
-        if (mdal == XCSR) begin
-            odt_out <= {8'b0, rxrdy, 7'b0};
-        end
-        if (mdal == RBUF) begin
-            odt_out <= wdata;
-        end
+        case (mdal)
+            RCSR : odt_out <= {8'b0, wxrdy, 7'b0};
+            XCSR : odt_out <= {8'b0, rxrdy, 7'b0};
+            RBUF : odt_out <= wdata;
+            PRS  : odt_out <= 16'b1000_0000_0000_0000;
+            PRB  : odt_out <= 16'b0;
+            PPS  : odt_out <= 16'b1000_0000_0000_0001;
+            default : odt_out <= 16'bz;
+        endcase
     end else begin
         odt_out <= 16'bz;
     end
@@ -231,7 +246,7 @@ always_ff@(posedge clk) begin
             miss_n <= (!ale_n && !bufctl_n) ? 1'b0 : 1'b1;
             ram_read <= (!ale_n && !bufctl_n) ? 1'b1 : 1'b0;
             mem_out <= (ale_n && !bufctl_n) ? ram_rdata : 16'bz;
-            dv <= !sctl_n; 
+            dv <= 1'b1;
         end
     end
 end

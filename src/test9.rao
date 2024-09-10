@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="u_ram/clk_out" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="0" sample_clock="sclk" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="maio[3:0]">
@@ -14,24 +14,6 @@
             <Bus capture_enable="true" name="mbs[1:0]">
                 <Signal>mbs[1]</Signal>
                 <Signal>mbs[0]</Signal>
-            </Bus>
-            <Bus capture_enable="true" name="mdal[15:0]">
-                <Signal>mdal[15]</Signal>
-                <Signal>mdal[14]</Signal>
-                <Signal>mdal[13]</Signal>
-                <Signal>mdal[12]</Signal>
-                <Signal>mdal[11]</Signal>
-                <Signal>mdal[10]</Signal>
-                <Signal>mdal[9]</Signal>
-                <Signal>mdal[8]</Signal>
-                <Signal>mdal[7]</Signal>
-                <Signal>mdal[6]</Signal>
-                <Signal>mdal[5]</Signal>
-                <Signal>mdal[4]</Signal>
-                <Signal>mdal[3]</Signal>
-                <Signal>mdal[2]</Signal>
-                <Signal>mdal[1]</Signal>
-                <Signal>mdal[0]</Signal>
             </Bus>
             <Signal capture_enable="true">ale_n</Signal>
             <Signal capture_enable="true">bufctl_n</Signal>
@@ -57,25 +39,38 @@
             <Signal capture_enable="true">u_ram/cmd0</Signal>
             <Signal capture_enable="true">u_ram/cmd_en0</Signal>
             <Signal capture_enable="true">dallo_oe_n</Signal>
-            <Bus capture_enable="true" name="ram_rdata[15:0]">
-                <Signal>ram_rdata[15]</Signal>
-                <Signal>ram_rdata[14]</Signal>
-                <Signal>ram_rdata[13]</Signal>
-                <Signal>ram_rdata[12]</Signal>
-                <Signal>ram_rdata[11]</Signal>
-                <Signal>ram_rdata[10]</Signal>
-                <Signal>ram_rdata[9]</Signal>
-                <Signal>ram_rdata[8]</Signal>
-                <Signal>ram_rdata[7]</Signal>
-                <Signal>ram_rdata[6]</Signal>
-                <Signal>ram_rdata[5]</Signal>
-                <Signal>ram_rdata[4]</Signal>
-                <Signal>ram_rdata[3]</Signal>
-                <Signal>ram_rdata[2]</Signal>
-                <Signal>ram_rdata[1]</Signal>
-                <Signal>ram_rdata[0]</Signal>
-            </Bus>
             <Signal capture_enable="true">u_ram/init_calib0</Signal>
+            <Bus capture_enable="true" name="count[7:0]">
+                <Signal>count[7]</Signal>
+                <Signal>count[6]</Signal>
+                <Signal>count[5]</Signal>
+                <Signal>count[4]</Signal>
+                <Signal>count[3]</Signal>
+                <Signal>count[2]</Signal>
+                <Signal>count[1]</Signal>
+                <Signal>count[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="dal[15:0]">
+                <Signal>dal[15]</Signal>
+                <Signal>dal[14]</Signal>
+                <Signal>dal[13]</Signal>
+                <Signal>dal[12]</Signal>
+                <Signal>dal[11]</Signal>
+                <Signal>dal[10]</Signal>
+                <Signal>dal[9]</Signal>
+                <Signal>dal[8]</Signal>
+                <Signal>dal[7]</Signal>
+                <Signal>dal[6]</Signal>
+                <Signal>dal[5]</Signal>
+                <Signal>dal[4]</Signal>
+                <Signal>dal[3]</Signal>
+                <Signal>dal[2]</Signal>
+                <Signal>dal[1]</Signal>
+                <Signal>dal[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">dalhi_oe_n</Signal>
+            <Signal capture_enable="true">clk_x2</Signal>
+            <Signal capture_enable="true">u_ram/pll_lock</Signal>
             <Bus capture_enable="false" name="u_ram/rd_data0[31:16]">
                 <Signal>u_ram/rd_data0[31]</Signal>
                 <Signal>u_ram/rd_data0[30]</Signal>
@@ -130,6 +125,42 @@
                 <Signal>ram_wdata[1]</Signal>
                 <Signal>ram_wdata[0]</Signal>
             </Bus>
+            <Bus capture_enable="false" name="ram_rdata[15:0]">
+                <Signal>ram_rdata[15]</Signal>
+                <Signal>ram_rdata[14]</Signal>
+                <Signal>ram_rdata[13]</Signal>
+                <Signal>ram_rdata[12]</Signal>
+                <Signal>ram_rdata[11]</Signal>
+                <Signal>ram_rdata[10]</Signal>
+                <Signal>ram_rdata[9]</Signal>
+                <Signal>ram_rdata[8]</Signal>
+                <Signal>ram_rdata[7]</Signal>
+                <Signal>ram_rdata[6]</Signal>
+                <Signal>ram_rdata[5]</Signal>
+                <Signal>ram_rdata[4]</Signal>
+                <Signal>ram_rdata[3]</Signal>
+                <Signal>ram_rdata[2]</Signal>
+                <Signal>ram_rdata[1]</Signal>
+                <Signal>ram_rdata[0]</Signal>
+            </Bus>
+            <Bus capture_enable="false" name="mdal[15:0]">
+                <Signal>mdal[15]</Signal>
+                <Signal>mdal[14]</Signal>
+                <Signal>mdal[13]</Signal>
+                <Signal>mdal[12]</Signal>
+                <Signal>mdal[11]</Signal>
+                <Signal>mdal[10]</Signal>
+                <Signal>mdal[9]</Signal>
+                <Signal>mdal[8]</Signal>
+                <Signal>mdal[7]</Signal>
+                <Signal>mdal[6]</Signal>
+                <Signal>mdal[5]</Signal>
+                <Signal>mdal[4]</Signal>
+                <Signal>mdal[3]</Signal>
+                <Signal>mdal[2]</Signal>
+                <Signal>mdal[1]</Signal>
+                <Signal>mdal[0]</Signal>
+            </Bus>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -175,7 +206,7 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <AoCore index="1" sample_clock="u_ram/clk_out" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="1" sample_clock="sclk" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="maio[3:0]">
@@ -286,5 +317,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1100011100100010</GAO_ID>
+    <GAO_ID>0000010110010010</GAO_ID>
 </GAO_CONFIG>
