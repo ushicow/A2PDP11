@@ -32,7 +32,9 @@ module top (
     inout wire [1:0] IO_psram_rwds,
     output wire [1:0] O_psram_cs_n,
     output wire [1:0] O_psram_reset_n,
-    input wire mclk
+    input wire mclk,
+    input wire rst_n,
+    output wire led1
 );
 
 // AIO CODE
@@ -91,6 +93,37 @@ logic [21:0] mdal;
 logic [3:0] maio;
 logic [1:0] mbs;
 logic [7:0] gp_code;
+//always_ff@(negedge clk_x2) begin
+//    if (ale_n) begin
+//        count <= 0;
+//    end else begin
+//        if (count == 8'd0) begin
+//            dallo_oe_n <= 1'b1;
+//            dalhi_oe_n <= 1'b0;
+//            if ((aio == GP_READ) || (aio == GP_WRITE)) begin
+//                gp_code <= dal[7:0];
+//            end else begin
+//                gp_code <= 8'b11111111;
+//            end
+//            mdallo <= dal;
+//        end else if (count == 8'd1) begin
+//            maio <= aio;
+//            mbs[0] <= dal[6];
+//            mbs[1] <= dal[7];
+//            mdal[21] <= dal[8];
+//            mdal[20] <= dal[0];
+//            mdal[19] <= dal[9];
+//            mdal[18] <= dal[10];
+//            mdal[17] <= dal[11];
+//            mdal[16] <= dal[12];
+//            mdal[15:0] <= mdallo;
+//            dallo_oe_n <= 1'b0;
+//            dalhi_oe_n <= 1'b1;
+//        end
+//        count <= count + 1'b1;
+//    end
+//end
+
 always_ff@(posedge clk_x2) begin
     if (ale_n) begin
         count <= 0;
@@ -221,7 +254,7 @@ always_ff@(negedge bufctl_n) begin
             RBUF : odt_out <= wdata;
             PRS  : odt_out <= 16'b1000_0000_0000_0000;
             PRB  : odt_out <= 16'b0;
-            PPS  : odt_out <= 16'b1000_0000_0000_0001;
+            PPS  : odt_out <= 16'b0000_0000_1000_0000;
             default : odt_out <= 16'bz;
         endcase
     end else begin
@@ -229,10 +262,13 @@ always_ff@(negedge bufctl_n) begin
     end
 end
 
+logic init;
+assign led1 = init;
 ram u_ram(
     .*
 );
 
+assign dv = 1'b1;
 logic [21:0] ram_addr;
 logic [15:0] ram_rdata;
 logic [15:0] ram_wdata;
@@ -246,7 +282,6 @@ always_ff@(posedge clk) begin
             miss_n <= (!ale_n && !bufctl_n) ? 1'b0 : 1'b1;
             ram_read <= (!ale_n && !bufctl_n) ? 1'b1 : 1'b0;
             mem_out <= (ale_n && !bufctl_n) ? ram_rdata : 16'bz;
-            dv <= 1'b1;
         end
     end
 end

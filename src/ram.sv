@@ -17,8 +17,12 @@ module ram (
     input wire [21:0] ram_addr,
     output reg [15:0] ram_rdata,
     input wire [15:0] ram_wdata,
-    input wire mclk
+    input wire mclk,
+    input wire rst_n,
+    output wire init
 );
+
+assign init = init_calib0;
 
 Gowin_rPLL_ram pll_ram(
     .clkout(memory_clk), //output clkout
@@ -29,7 +33,7 @@ Gowin_rPLL_ram pll_ram(
 );
 
 logic clk_d;
-logic rst_n;
+//logic rst_n;
 logic memory_clk;
 logic memory_clk_p;
 logic pll_lock;
@@ -51,7 +55,7 @@ logic rd_data_valid1;
 logic [3:0] data_mask0;
 logic [3:0] data_mask1;
 
-assign rst_n = 1'b1;
+//assign rst_n = 1'b1;
 assign cmd1 = 1'b0;
 assign cmd_en1 = 1'b0;
 assign addr1 = 21'b0;
