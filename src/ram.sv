@@ -2,7 +2,8 @@
 // DCJ11 TangNano interface by nanja.info
 // PSRAM interface module
 // TEST8 2024.08.31 4MB RAM
-// TEST9 2026.09.03 Byte Data Write
+// TEST9 2024.09.03 Byte Data Write
+// TEST10 2024.09.13 Add rst_n and init interface
 
 module ram (
     output wire [1:0] O_psram_ck,

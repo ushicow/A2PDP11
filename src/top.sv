@@ -8,6 +8,7 @@
 // TEST7 2024.08.26 2KB RAM
 // TEST8 2024.08.31 4MB RAM
 // TEST9 2024.09.03 Byte Data Write
+// TEST10 2024.09.13 Paper Tape Reader/Punch dummy response
 
 module top ( 
     inout wire [15:0] dal,      // DAL<21:0>, BS<1:0>
@@ -93,37 +94,6 @@ logic [21:0] mdal;
 logic [3:0] maio;
 logic [1:0] mbs;
 logic [7:0] gp_code;
-//always_ff@(negedge clk_x2) begin
-//    if (ale_n) begin
-//        count <= 0;
-//    end else begin
-//        if (count == 8'd0) begin
-//            dallo_oe_n <= 1'b1;
-//            dalhi_oe_n <= 1'b0;
-//            if ((aio == GP_READ) || (aio == GP_WRITE)) begin
-//                gp_code <= dal[7:0];
-//            end else begin
-//                gp_code <= 8'b11111111;
-//            end
-//            mdallo <= dal;
-//        end else if (count == 8'd1) begin
-//            maio <= aio;
-//            mbs[0] <= dal[6];
-//            mbs[1] <= dal[7];
-//            mdal[21] <= dal[8];
-//            mdal[20] <= dal[0];
-//            mdal[19] <= dal[9];
-//            mdal[18] <= dal[10];
-//            mdal[17] <= dal[11];
-//            mdal[16] <= dal[12];
-//            mdal[15:0] <= mdallo;
-//            dallo_oe_n <= 1'b0;
-//            dalhi_oe_n <= 1'b1;
-//        end
-//        count <= count + 1'b1;
-//    end
-//end
-
 always_ff@(posedge clk_x2) begin
     if (ale_n) begin
         count <= 0;
