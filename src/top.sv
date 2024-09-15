@@ -75,6 +75,8 @@ parameter PRB           = 22'o17777552; // Paper Tape Reader Buffer Register
 parameter PPS           = 22'o17777554; // Paper Tape Punch Status Register
 parameter PPB           = 22'o17777556; // Paper Tape Punch Buffer Register
 
+parameter HIMEM         = 22'o17757777; // End of RAM
+
 logic sclk;
 Gowin_OSC osc(
     .oscout(sclk) //output oscout
@@ -128,22 +130,13 @@ always_ff@(negedge clk_x2) begin
     end
 end
 
-always_ff@(negedge bufctl_n) begin
-    if ((gp_code == POWER_UP0) || (gp_code == POWER_UP2)) begin
-        dal_out <= 16'b0000000_0_0000_0_01_1;
-                // BOOT_ADDRESS, FPE, UNUSED, HALT, MODE, POK
-    end else begin
-        dal_out <= 0;
-    end
-end
-
 assign nxm_n = sctl_n ? 1'b1 : !nxm;
 logic nxm;
 always_ff@(negedge sctl_n) begin
     if ((maio[3:2] == 2'b10) || (maio[3:2] == 2'b00)) begin
 //         RMW_BUSLOCK, RMW_NOLOCK, DATA_READ, DEMAND_READ, WORD_WRITE, BYTE_WRITE
         if (mbs == BS_MEM) begin
-            if (mdal >= 22'o17760000) begin
+            if (mdal > HIMEM) begin
                 nxm <= 1'b1;
             end
         end
@@ -211,26 +204,41 @@ always_ff@(negedge clk) begin
     end
 end
 
-logic [15:0] dal_out;
-logic [15:0] odt_out;
-logic [15:0] mem_out;
-assign dal = bufctl_n ? 16'bz : dal_out | odt_out | mem_out;
+assign dal = bufctl_n ? 16'bz : 
+    (mdal == RCSR) ? {8'b0, wxrdy, 7'b0} :
+    (mdal == XCSR) ? {8'b0, rxrdy, 7'b0} :
+    (mdal == RBUF) ? wdata :
+    (mdal == PRS) ? 16'b1000_0000_0000_0000 :
+    (mdal == PRB) ? 16'b0 :
+    (mdal == PPS) ? 16'b0000_0000_1000_0000 :
+    (gp_code == POWER_UP0) ? 16'b0000000_0_0000_0_01_1 :
+    (gp_code == POWER_UP2) ? 16'b0000000_0_0000_0_01_1 :
+    (mdal <= HIMEM) ? ram_rdata : 16'bz;
 
-always_ff@(negedge bufctl_n) begin
-    if ((maio == DATA_READ) && (mbs == BS_EXT)) begin
-        case (mdal)
-            RCSR : odt_out <= {8'b0, wxrdy, 7'b0};
-            XCSR : odt_out <= {8'b0, rxrdy, 7'b0};
-            RBUF : odt_out <= wdata;
-            PRS  : odt_out <= 16'b1000_0000_0000_0000;
-            PRB  : odt_out <= 16'b0;
-            PPS  : odt_out <= 16'b0000_0000_1000_0000;
-            default : odt_out <= 16'bz;
-        endcase
-    end else begin
-        odt_out <= 16'bz;
-    end
-end
+//always_ff@(negedge bufctl_n) begin
+//    if ((gp_code == POWER_UP0) || (gp_code == POWER_UP2)) begin
+//        dal_out <= 16'b0000000_0_0000_0_01_1;
+//               BOOT_ADDRESS, FPE, UNUSED, HALT, MODE, POK
+//    end else begin
+//        dal_out <= 0;
+//    end
+//end
+
+//always_ff@(negedge bufctl_n) begin
+//    if ((maio == DATA_READ) && (mbs == BS_EXT)) begin
+//        case (mdal)
+//            RCSR : odt_out <= {8'b0, wxrdy, 7'b0};
+//            XCSR : odt_out <= {8'b0, rxrdy, 7'b0};
+//            RBUF : odt_out <= wdata;
+//            PRS  : odt_out <= 16'b1000_0000_0000_0000;
+//            PRB  : odt_out <= 16'b0;
+//            PPS  : odt_out <= 16'b0000_0000_1000_0000;
+//            default : odt_out <= 16'bz;
+//        endcase
+//    end else begin
+//        odt_out <= 16'bz;
+//    end
+//end
 
 logic init;
 assign led1 = init;
@@ -251,7 +259,6 @@ always_ff@(posedge clk) begin
         if ((maio[3:2] == 2'b10) || (maio == REQUEST_READ)) begin
             miss_n <= (!ale_n && !bufctl_n) ? 1'b0 : 1'b1;
             ram_read <= (!ale_n && !bufctl_n) ? 1'b1 : 1'b0;
-            mem_out <= (ale_n && !bufctl_n) ? ram_rdata : 16'bz;
         end
     end
 end

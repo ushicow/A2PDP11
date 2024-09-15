@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="clk_x4" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="0" sample_clock="clk" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="mdal[15:0]">
@@ -153,5 +153,5 @@
             <Expression>M1</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0100010000001000</GAO_ID>
+    <GAO_ID>0111000011000100</GAO_ID>
 </GAO_CONFIG>
