@@ -272,6 +272,8 @@
                 <Signal>ram_wdata[1]</Signal>
                 <Signal>ram_wdata[0]</Signal>
             </Bus>
+            <Signal capture_enable="true">dal[7]</Signal>
+            <Signal capture_enable="true">dal[6]</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -317,5 +319,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0010101110011011</GAO_ID>
+    <GAO_ID>0011101101011010</GAO_ID>
 </GAO_CONFIG>

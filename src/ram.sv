@@ -154,17 +154,14 @@ always_ff@(posedge clk_out or negedge rst_n) begin
     end
 end
 
-always_ff@(posedge clk_out) begin
-    if (rd_data_valid0 && (rcycle == 1'b0)) begin
-        ram_rdata <= rd_data0[31:16];
-    end
-end
-
 logic [1:0] rcycle;
-always_ff@(posedge clk_out) begin
+always_ff@(negedge clk_out) begin
     if (mcycle == 1) begin
         rcycle <= 0;
     end else if (rd_data_valid0) begin
+        if (rcycle == 1'b0) begin
+            ram_rdata <= rd_data0[31:16];
+        end
         rcycle <= rcycle + 1'b1;
     end
 end

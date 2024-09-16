@@ -100,33 +100,30 @@ always_ff@(posedge clk_x2) begin
     if (ale_n) begin
         count <= 0;
     end else begin
-        count <= count + 1'b1;
-    end
-end
-
-always_ff@(negedge clk_x2) begin
-    if (count == 8'd1) begin
-        dallo_oe_n <= 1'b1;
-        dalhi_oe_n <= 1'b0;
-        if ((aio == GP_READ) || (aio == GP_WRITE)) begin
-            gp_code <= dal[7:0];
-        end else begin
-            gp_code <= 8'b11111111;
+        if (count == 8'd0) begin
+            dallo_oe_n <= 1'b1;
+            dalhi_oe_n <= 1'b0;
+            if ((aio == GP_READ) || (aio == GP_WRITE)) begin
+                gp_code <= dal[7:0];
+            end else begin
+                gp_code <= 8'b11111111;
+            end
+            mdallo <= dal;
+        end else if (count == 8'd1) begin
+            maio <= aio;
+            mbs[0] <= dal[6];
+            mbs[1] <= dal[7];
+            mdal[21] <= dal[8];
+            mdal[20] <= dal[0];
+            mdal[19] <= dal[9];
+            mdal[18] <= dal[10];
+            mdal[17] <= dal[11];
+            mdal[16] <= dal[12];
+            mdal[15:0] <= mdallo;
+            dallo_oe_n <= 1'b0;
+            dalhi_oe_n <= 1'b1;
         end
-        mdallo <= dal;
-    end else if (count == 8'd2) begin
-        maio <= aio;
-        mbs[0] <= dal[6];
-        mbs[1] <= dal[7];
-        mdal[21] <= dal[8];
-        mdal[20] <= dal[0];
-        mdal[19] <= dal[9];
-        mdal[18] <= dal[10];
-        mdal[17] <= dal[11];
-        mdal[16] <= dal[12];
-        mdal[15:0] <= mdallo;
-        dallo_oe_n <= 1'b0;
-        dalhi_oe_n <= 1'b1;
+        count <= count + 1'b1;
     end
 end
 
@@ -215,31 +212,6 @@ assign dal = bufctl_n ? 16'bz :
     (gp_code == POWER_UP2) ? 16'b0000000_0_0000_0_01_1 :
     (mdal <= HIMEM) ? ram_rdata : 16'bz;
 
-//always_ff@(negedge bufctl_n) begin
-//    if ((gp_code == POWER_UP0) || (gp_code == POWER_UP2)) begin
-//        dal_out <= 16'b0000000_0_0000_0_01_1;
-//               BOOT_ADDRESS, FPE, UNUSED, HALT, MODE, POK
-//    end else begin
-//        dal_out <= 0;
-//    end
-//end
-
-//always_ff@(negedge bufctl_n) begin
-//    if ((maio == DATA_READ) && (mbs == BS_EXT)) begin
-//        case (mdal)
-//            RCSR : odt_out <= {8'b0, wxrdy, 7'b0};
-//            XCSR : odt_out <= {8'b0, rxrdy, 7'b0};
-//            RBUF : odt_out <= wdata;
-//            PRS  : odt_out <= 16'b1000_0000_0000_0000;
-//            PRB  : odt_out <= 16'b0;
-//            PPS  : odt_out <= 16'b0000_0000_1000_0000;
-//            default : odt_out <= 16'bz;
-//        endcase
-//    end else begin
-//        odt_out <= 16'bz;
-//    end
-//end
-
 logic init;
 assign led1 = init;
 ram u_ram(
@@ -253,13 +225,16 @@ logic [15:0] ram_wdata;
 logic ram_read;
 logic ram_write;
 logic ram_byte;
-always_ff@(posedge clk) begin
-    if (mbs == BS_MEM) begin
+always_ff@(posedge clk_x2) begin
+    if ((mbs == BS_MEM) && (count == 2)) begin
         ram_addr <= mdal;
         if ((maio[3:2] == 2'b10) || (maio == REQUEST_READ)) begin
-            miss_n <= (!ale_n && !bufctl_n) ? 1'b0 : 1'b1;
-            ram_read <= (!ale_n && !bufctl_n) ? 1'b1 : 1'b0;
+            miss_n <= 1'b0;
+            ram_read <= 1'b1;
         end
+    end else if (count == 0) begin
+        miss_n <= 1'b1;
+        ram_read <= 1'b0;
     end
 end
 

@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="rpll/clk_x4" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="200" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="0" sample_clock="clk_x4" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="maio[3:0]">
@@ -37,7 +37,8 @@
             <Signal capture_enable="true">bufctl_n</Signal>
             <Signal capture_enable="true">sctl_n</Signal>
             <Signal capture_enable="true">ram_read</Signal>
-            <Bus capture_enable="true" name="u_ram/mcycle[4:0]">
+            <Bus capture_enable="true" name="u_ram/mcycle[5:0]">
+                <Signal>u_ram/mcycle[5]</Signal>
                 <Signal>u_ram/mcycle[4]</Signal>
                 <Signal>u_ram/mcycle[3]</Signal>
                 <Signal>u_ram/mcycle[2]</Signal>
@@ -52,27 +53,82 @@
             <Signal capture_enable="true">u_ram/clk_out</Signal>
             <Signal capture_enable="true">miss_n</Signal>
             <Signal capture_enable="true">dv</Signal>
-            <Signal capture_enable="true">u_ram/psram/rd_data_valid0</Signal>
+            <Signal capture_enable="true">u_ram/rd_data_valid0</Signal>
             <Signal capture_enable="true">u_ram/cmd0</Signal>
             <Signal capture_enable="true">u_ram/cmd_en0</Signal>
             <Signal capture_enable="true">dallo_oe_n</Signal>
-            <Bus capture_enable="true" name="ram_rdata_Z[15:0]">
-                <Signal>ram_rdata_Z[15]</Signal>
-                <Signal>ram_rdata_Z[14]</Signal>
-                <Signal>ram_rdata_Z[13]</Signal>
-                <Signal>ram_rdata_Z[12]</Signal>
-                <Signal>ram_rdata_Z[11]</Signal>
-                <Signal>ram_rdata_Z[10]</Signal>
-                <Signal>ram_rdata_Z[9]</Signal>
-                <Signal>ram_rdata_Z[8]</Signal>
-                <Signal>ram_rdata_Z[7]</Signal>
-                <Signal>ram_rdata_Z[6]</Signal>
-                <Signal>ram_rdata_Z[5]</Signal>
-                <Signal>ram_rdata_Z[4]</Signal>
-                <Signal>ram_rdata_Z[3]</Signal>
-                <Signal>ram_rdata_Z[2]</Signal>
-                <Signal>ram_rdata_Z[1]</Signal>
-                <Signal>ram_rdata_Z[0]</Signal>
+            <Bus capture_enable="true" name="ram_rdata[15:0]">
+                <Signal>ram_rdata[15]</Signal>
+                <Signal>ram_rdata[14]</Signal>
+                <Signal>ram_rdata[13]</Signal>
+                <Signal>ram_rdata[12]</Signal>
+                <Signal>ram_rdata[11]</Signal>
+                <Signal>ram_rdata[10]</Signal>
+                <Signal>ram_rdata[9]</Signal>
+                <Signal>ram_rdata[8]</Signal>
+                <Signal>ram_rdata[7]</Signal>
+                <Signal>ram_rdata[6]</Signal>
+                <Signal>ram_rdata[5]</Signal>
+                <Signal>ram_rdata[4]</Signal>
+                <Signal>ram_rdata[3]</Signal>
+                <Signal>ram_rdata[2]</Signal>
+                <Signal>ram_rdata[1]</Signal>
+                <Signal>ram_rdata[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">u_ram/init_calib0</Signal>
+            <Bus capture_enable="false" name="u_ram/rd_data0[31:16]">
+                <Signal>u_ram/rd_data0[31]</Signal>
+                <Signal>u_ram/rd_data0[30]</Signal>
+                <Signal>u_ram/rd_data0[29]</Signal>
+                <Signal>u_ram/rd_data0[28]</Signal>
+                <Signal>u_ram/rd_data0[27]</Signal>
+                <Signal>u_ram/rd_data0[26]</Signal>
+                <Signal>u_ram/rd_data0[25]</Signal>
+                <Signal>u_ram/rd_data0[24]</Signal>
+                <Signal>u_ram/rd_data0[23]</Signal>
+                <Signal>u_ram/rd_data0[22]</Signal>
+                <Signal>u_ram/rd_data0[21]</Signal>
+                <Signal>u_ram/rd_data0[20]</Signal>
+                <Signal>u_ram/rd_data0[19]</Signal>
+                <Signal>u_ram/rd_data0[18]</Signal>
+                <Signal>u_ram/rd_data0[17]</Signal>
+                <Signal>u_ram/rd_data0[16]</Signal>
+            </Bus>
+            <Bus capture_enable="false" name="u_ram/rd_data0[15:0]">
+                <Signal>u_ram/rd_data0[15]</Signal>
+                <Signal>u_ram/rd_data0[14]</Signal>
+                <Signal>u_ram/rd_data0[13]</Signal>
+                <Signal>u_ram/rd_data0[12]</Signal>
+                <Signal>u_ram/rd_data0[11]</Signal>
+                <Signal>u_ram/rd_data0[10]</Signal>
+                <Signal>u_ram/rd_data0[9]</Signal>
+                <Signal>u_ram/rd_data0[8]</Signal>
+                <Signal>u_ram/rd_data0[7]</Signal>
+                <Signal>u_ram/rd_data0[6]</Signal>
+                <Signal>u_ram/rd_data0[5]</Signal>
+                <Signal>u_ram/rd_data0[4]</Signal>
+                <Signal>u_ram/rd_data0[3]</Signal>
+                <Signal>u_ram/rd_data0[2]</Signal>
+                <Signal>u_ram/rd_data0[1]</Signal>
+                <Signal>u_ram/rd_data0[0]</Signal>
+            </Bus>
+            <Bus capture_enable="false" name="ram_wdata[15:0]">
+                <Signal>ram_wdata[15]</Signal>
+                <Signal>ram_wdata[14]</Signal>
+                <Signal>ram_wdata[13]</Signal>
+                <Signal>ram_wdata[12]</Signal>
+                <Signal>ram_wdata[11]</Signal>
+                <Signal>ram_wdata[10]</Signal>
+                <Signal>ram_wdata[9]</Signal>
+                <Signal>ram_wdata[8]</Signal>
+                <Signal>ram_wdata[7]</Signal>
+                <Signal>ram_wdata[6]</Signal>
+                <Signal>ram_wdata[5]</Signal>
+                <Signal>ram_wdata[4]</Signal>
+                <Signal>ram_wdata[3]</Signal>
+                <Signal>ram_wdata[2]</Signal>
+                <Signal>ram_wdata[1]</Signal>
+                <Signal>ram_wdata[0]</Signal>
             </Bus>
         </SignalList>
         <Triggers>
@@ -119,5 +175,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1011001010000101</GAO_ID>
+    <GAO_ID>0010010011110100</GAO_ID>
 </GAO_CONFIG>
