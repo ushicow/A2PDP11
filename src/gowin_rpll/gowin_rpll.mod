@@ -15,9 +15,9 @@
 -dyn_idiv_sel false
 -idiv_sel 1
 -dyn_fbdiv_sel false
--fbdiv_sel 4
+-fbdiv_sel 6
 -dyn_odiv_sel false
--odiv_sel 8
+-odiv_sel 4
 -dyn_sdiv_sel 2
 -dyn_da_en true
 -rst_sig false
