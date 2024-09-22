@@ -9,6 +9,7 @@
 // TEST8 2024.08.31 4MB RAM
 // TEST9 2024.09.03 Byte Data Write
 // TEST10 2024.09.13 Paper Tape Reader/Punch dummy response
+// TEST11 2024.09.21 Modify read timing
 
 module top ( 
     inout wire [15:0] dal,      // DAL<21:0>, BS<1:0>
@@ -82,11 +83,9 @@ Gowin_OSC osc(
     .oscout(sclk) //output oscout
 );
 
-logic clk_x4;   // clk x 4 = 72MHz
-logic clk_x2;   // clk x 2 = 36MHz
+logic clk_x3;   // clk x 3 = 54MHz
 Gowin_rPLL rpll(
-    .clkout(clk_x4), //output clkout
-    .clkoutd(clk_x2), //output clkoutd
+    .clkout(clk_x3), //output clkout
     .clkin(clk) //input clkin
 );
 
@@ -96,7 +95,7 @@ logic [21:0] mdal;
 logic [3:0] maio;
 logic [1:0] mbs;
 logic [7:0] gp_code;
-always_ff@(posedge clk_x2) begin
+always_ff@(posedge clk_x3) begin
     if (ale_n) begin
         count <= 0;
     end else begin
@@ -127,27 +126,10 @@ always_ff@(posedge clk_x2) begin
     end
 end
 
-assign nxm_n = sctl_n ? 1'b1 : !nxm;
-logic nxm;
-always_ff@(negedge sctl_n) begin
-    if ((maio[3:2] == 2'b10) || (maio[3:2] == 2'b00)) begin
-//         RMW_BUSLOCK, RMW_NOLOCK, DATA_READ, DEMAND_READ, WORD_WRITE, BYTE_WRITE
-        if (mbs == BS_MEM) begin
-            if (mdal > HIMEM) begin
-                nxm <= 1'b1;
-            end
-        end
-        if (mbs == BS_EXT) begin
-            if ((mdal[21:3] == DLART) || (mdal[21:3] == PC11)) begin
-                nxm <= 1'b0;
-            end else begin
-                nxm <= 1'b1;
-            end
-        end
-    end else begin
-        nxm <= 1'b0;
-    end
-end
+assign nxm_n = sctl_n ? 1'b1 :
+    ((maio[2] == 0) && (mbs == BS_MEM) && (mdal > HIMEM)) ? 1'b0 :
+    ((maio[2] == 0) && (mbs == BS_EXT) && ((mdal[21:3] != DLART) && (mdal[21:3] != PC11))) ? 1'b0 :
+    1'b1;
 
 logic rxrdy;
 logic rrdy1;
@@ -225,7 +207,7 @@ logic [15:0] ram_wdata;
 logic ram_read;
 logic ram_write;
 logic ram_byte;
-always_ff@(posedge clk_x2) begin
+always_ff@(posedge clk_x3) begin
     if ((mbs == BS_MEM) && (count == 2)) begin
         ram_addr <= mdal;
         if ((maio[3:2] == 2'b10) || (maio == REQUEST_READ)) begin
