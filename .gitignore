@@ -2,3 +2,4 @@ impl/gwsynthesis
 impl/pnr
 tmp/
 temp/
+*backups
