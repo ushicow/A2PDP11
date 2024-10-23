@@ -13,7 +13,7 @@
 
 module top ( 
     inout wire [15:0] dal,      // DAL<21:0>, BS<1:0>
-    input wire [3:0] aio,       // AIO<3:0>
+    input wire [3:0] a,         // A<3:0>
     input wire bufctl_n,
     input wire ale_n,
     output wire nxm_n,
@@ -95,20 +95,22 @@ logic [21:0] mdal;
 logic [3:0] maio;
 logic [1:0] mbs;
 logic [7:0] gp_code;
+logic [3:0] aio;
+assign aio = {dal[1], dal[15], dal[14], dal[13]};
 always_ff@(posedge clk_x3) begin
     if (ale_n) begin
         count <= 0;
     end else begin
-        if (count == 8'd0) begin
+        if (count == 0) begin
             dallo_oe_n <= 1'b1;
             dalhi_oe_n <= 1'b0;
+            mdallo <= dal;
+        end else if (count == 1) begin
             if ((aio == GP_READ) || (aio == GP_WRITE)) begin
-                gp_code <= dal[7:0];
+                gp_code <= mdallo[7:0];
             end else begin
                 gp_code <= 8'b11111111;
             end
-            mdallo <= dal;
-        end else if (count == 8'd1) begin
             maio <= aio;
             mbs[0] <= dal[6];
             mbs[1] <= dal[7];
