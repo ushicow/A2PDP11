@@ -12,22 +12,22 @@
 // TEST11 2024.09.21 Modify read timing
 
 module top ( 
-    inout wire [15:0] dal,      // DAL<21:0>, BS<1:0>
-    input wire [3:0] a,         // A<3:0>
+    inout wire [15:0] dal,          // DAL<21:0>, BS<1:0>
+    input wire [3:0] a,             // Apple II Address A<3:0>
+    inout wire [7:0] d,             // Apple II Data D<7:0>
+    input wire devsel_n,            // Apple II /DEVSEL
+    input wire rw,                  // Apple II R/W
     input wire bufctl_n,
     input wire ale_n,
-    output wire nxm,
+    output wire nxm_n,
     input wire sctl_n,
     input wire clk,
     output reg dv,
     output reg miss_n,
     output reg dallo_oe_n,
     output reg event_n,
-    input wire rrdy_n,            // Ready to read from DCJ11's ODT data
-    output reg rstb_n,            // Strobe for read from DCJ11's ODT data
-    input wire wrdy_n,            // Ready to write to DCJ11's ODT data
-    output reg wstb_n,            // Strobe for write to DCJ11's ODT data
-    inout wire [7:0] ad,        // ODT data
+    output reg irq0,
+    output reg irq1,
     output wire [1:0] O_psram_ck,
     output wire [1:0] O_psram_ck_n,
     inout wire [15:0] IO_psram_dq,
@@ -78,6 +78,12 @@ parameter PPB           = 22'o17777556; // Paper Tape Punch Buffer Register
 
 parameter HIMEM         = 22'o17757777; // End of RAM
 
+// Apple II Register
+parameter A2RCSR        = 4'h0;         // Console out status; Read = rstb, Write = rrdy
+parameter A2RBUF        = 4'h1;         // Cousole out data
+parameter A2XCSR        = 4'h2;         // Console in status; Read = xstb, Write = xrdy  
+parameter A2XBUF        = 4'h3;         // Console in data
+
 logic sclk;
 Gowin_OSC osc(
     .oscout(sclk) //output oscout
@@ -126,67 +132,74 @@ always_ff@(posedge clk_x3) begin
     end
 end
 
-assign nxm = sctl_n ? 1'b0 :
-    ((maio[2] == 0) && (mbs == BS_MEM) && (mdal > HIMEM)) ? 1'b1 :
-    ((maio[2] == 0) && (mbs == BS_EXT) && ((mdal[21:3] != DLART) && (mdal[21:3] != PC11))) ? 1'b1 :
-    1'b0;
+assign nxm_n = sctl_n ? 1'b1 :
+    ((maio[2] == 0) && (mbs == BS_MEM) && (mdal > HIMEM)) ? 1'b0 :
+    ((maio[2] == 0) && (mbs == BS_EXT) && ((mdal[21:3] != DLART) && (mdal[21:3] != PC11))) ? 1'b0 :
+    1'b1;
 
-logic rxrdy;
-logic rrdy1;
-logic rrdy0;
-logic [7:0] rdata;
-always_ff@(negedge clk) begin
-    rrdy0 <= !rrdy_n;
-    rrdy1 <= rrdy0;
+logic [7:0] xbuf;
+logic [7:0] rbuf;
+logic xrdy;
+logic rrdy;
+assign d = !rw ? 8'bz :
+    a == A2RCSR ? {rstb, 7'b0} : 
+    a == A2XCSR ? {xstb, 7'b0} : 
+    a == A2XBUF ? xbuf : 8'b0;
+
+logic devsel0;
+logic devsel1;
+always_ff@(posedge clk) begin
+    devsel0 <= !devsel_n;
+    devsel1 <= devsel0;
 end
 
-always_ff@(negedge clk) begin
-    if ((sctl_n == 0) && (mdal == XBUF)) begin
-        rstb_n <= 1'b0;
-        rxrdy <= 1'b0;
-        rdata <= dal[7:0];
-    end else if (!rrdy1) begin
-        rstb_n <= 1'b1;
-    end else if (rstb_n) begin
-        rxrdy <= 1'b1;
+always_ff@(posedge devsel1) begin
+    if (!rw) begin
+        case (a)
+            A2RCSR : rrdy <= d[7];
+            A2RBUF : rbuf <= d;
+            A2XCSR : xrdy <= d[7];
+        endcase
     end
+end
+
+logic xdone;
+logic xstb;
+always_ff@(negedge clk) begin
     if (gp_code == 8'o014) begin
-        rxrdy <= 1'b1;
-        rstb_n <= 1'b1;
+        xdone <= 1'b1;
+        xstb <= 1'b0;
+    end else if ((sctl_n == 0) && (mdal == XBUF)) begin
+        xstb <= 1'b1;
+        xdone <= 1'b0;
+        xbuf <= dal[7:0];
+    end else if (!xrdy) begin
+        xstb <= 1'b0;
+    end else if (!xstb) begin
+        xdone <= 1'b1;
     end
 end
 
-assign ad = rstb_n ? 8'bz : rdata;
-
-logic wxrdy;
-logic wrdy1;
-logic wrdy0;
-logic [7:0] wdata;
+logic rdone;
+logic rstb;
 always_ff@(negedge clk) begin
-    wrdy0 <= !wrdy_n;
-    wrdy1 <= wrdy0;
-end
-
-always_ff@(negedge clk) begin
-    if (wrdy1) begin
-        wstb_n <= 1'b0;
-    end else if (!wstb_n) begin
-        wdata <= ad;
-        wstb_n <= 1'b1;
-        wxrdy <= 1'b1;
-    end else if ((mdal == RBUF) && (!sctl_n)) begin
-        wxrdy <= 1'b0;
-    end
     if (gp_code == 8'o014) begin
-        wxrdy <= 1'b0;
-        wstb_n <= 1'b1;
+        rdone <= 1'b0;
+        rstb <= 1'b0;
+    end else if (rrdy) begin
+        rstb <= 1'b1;
+    end else if (rstb) begin
+        rstb <= 1'b0;
+        rdone <= 1'b1;
+    end else if (mdal == RBUF) begin
+        rdone <= 1'b0;
     end
 end
 
 assign dal = bufctl_n ? 16'bz : 
-    (mdal == RCSR) ? {8'b0, wxrdy, 7'b0} :
-    (mdal == XCSR) ? {8'b0, rxrdy, 7'b0} :
-    (mdal == RBUF) ? wdata :
+    (mdal == RCSR) ? {8'b0, rdone, 7'b0} :
+    (mdal == XCSR) ? {8'b0, xdone, 7'b0} :
+    (mdal == RBUF) ? rbuf :
     (mdal == PRS) ? 16'b1000_0000_0000_0000 :
     (mdal == PRB) ? 16'b0 :
     (mdal == PPS) ? 16'b0000_0000_1000_0000 :
