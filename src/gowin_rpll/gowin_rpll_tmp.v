@@ -1,17 +1,18 @@
 //Copyright (C)2014-2024 Gowin Semiconductor Corporation.
 //All rights reserved.
 //File Title: Template file for instantiation
-//Tool Version: V1.9.10.01 (64-bit)
+//Tool Version: V1.9.10.02
 //Part Number: GW1NR-LV9QN88PC6/I5
 //Device: GW1NR-9
 //Device Version: C
-//Created Time: Fri Sep 20 21:46:33 2024
+//Created Time: Sat Nov  9 13:47:58 2024
 
 //Change the instance name and port connections to the signal names
 //--------Copy here to design--------
 
     Gowin_rPLL your_instance_name(
         .clkout(clkout), //output clkout
+        .clkoutd(clkoutd), //output clkoutd
         .clkin(clkin) //input clkin
     );
 

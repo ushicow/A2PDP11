@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="u_ram/clk_out" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="0" sample_clock="clk_x6" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="maio[3:0]">
@@ -51,30 +51,25 @@
             </Bus>
             <Signal capture_enable="true">u_ram/rd1</Signal>
             <Signal capture_enable="true">miss_n</Signal>
-            <Signal capture_enable="true">dv</Signal>
             <Signal capture_enable="true">u_ram/rd_data_valid0</Signal>
             <Signal capture_enable="true">u_ram/cmd0</Signal>
             <Signal capture_enable="true">u_ram/cmd_en0</Signal>
             <Signal capture_enable="true">dallo_oe_n</Signal>
-            <Signal capture_enable="true">u_ram/init_calib0</Signal>
             <Signal capture_enable="true">clk_x3</Signal>
+            <Signal capture_enable="true">nxm_n</Signal>
+            <Bus capture_enable="true" name="count[2:0]">
+                <Signal>count[2]</Signal>
+                <Signal>count[1]</Signal>
+                <Signal>count[0]</Signal>
+            </Bus>
             <Bus capture_enable="true" name="aio[3:0]">
                 <Signal>aio[3]</Signal>
                 <Signal>aio[2]</Signal>
                 <Signal>aio[1]</Signal>
                 <Signal>aio[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="gp_code[7:0]">
-                <Signal>gp_code[7]</Signal>
-                <Signal>gp_code[6]</Signal>
-                <Signal>gp_code[5]</Signal>
-                <Signal>gp_code[4]</Signal>
-                <Signal>gp_code[3]</Signal>
-                <Signal>gp_code[2]</Signal>
-                <Signal>gp_code[1]</Signal>
-                <Signal>gp_code[0]</Signal>
-            </Bus>
-            <Signal capture_enable="true">nxm_n</Signal>
+            <Signal capture_enable="true">dal[7]</Signal>
+            <Signal capture_enable="true">dal[6]</Signal>
             <Bus capture_enable="false" name="u_ram/rd_data0[31:16]">
                 <Signal>u_ram/rd_data0[31]</Signal>
                 <Signal>u_ram/rd_data0[30]</Signal>
@@ -130,6 +125,41 @@
                 <Signal>ram_wdata[0]</Signal>
             </Bus>
             <Signal capture_enable="false">u_ram/clk_out</Signal>
+            <Bus capture_enable="false" name="gp_code[7:0]">
+                <Signal>gp_code[7]</Signal>
+                <Signal>gp_code[6]</Signal>
+                <Signal>gp_code[5]</Signal>
+                <Signal>gp_code[4]</Signal>
+                <Signal>gp_code[3]</Signal>
+                <Signal>gp_code[2]</Signal>
+                <Signal>gp_code[1]</Signal>
+                <Signal>gp_code[0]</Signal>
+            </Bus>
+            <Bus capture_enable="false" name="mdallo[15:0]">
+                <Signal>mdallo[15]</Signal>
+                <Signal>mdallo[14]</Signal>
+                <Signal>mdallo[13]</Signal>
+                <Signal>mdallo[12]</Signal>
+                <Signal>mdallo[11]</Signal>
+                <Signal>mdallo[10]</Signal>
+                <Signal>mdallo[9]</Signal>
+                <Signal>mdallo[8]</Signal>
+                <Signal>mdallo[7]</Signal>
+                <Signal>mdallo[6]</Signal>
+                <Signal>mdallo[5]</Signal>
+                <Signal>mdallo[4]</Signal>
+                <Signal>mdallo[3]</Signal>
+                <Signal>mdallo[2]</Signal>
+                <Signal>mdallo[1]</Signal>
+                <Signal>mdallo[0]</Signal>
+            </Bus>
+            <Signal capture_enable="false">u_ram/init_calib0</Signal>
+            <Signal capture_enable="false">mdal[21]</Signal>
+            <Signal capture_enable="false">mdal[20]</Signal>
+            <Signal capture_enable="false">mdal[19]</Signal>
+            <Signal capture_enable="false">mdal[18]</Signal>
+            <Signal capture_enable="false">mdal[17]</Signal>
+            <Signal capture_enable="false">mdal[16]</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -180,7 +210,7 @@
             <Expression>M1</Expression>
         </Expressions>
     </AoCore>
-    <AoCore index="1" sample_clock="clk" trig_type="0" storage_depth="8192" window_num="1" capture_amount="8192" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="1" sample_clock="clk_x3" trig_type="0" storage_depth="8192" window_num="1" capture_amount="8192" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="a[3:0]">
@@ -221,6 +251,16 @@
                 <Signal>xbuf[0]</Signal>
             </Bus>
             <Signal capture_enable="true">devsel1</Signal>
+            <Bus capture_enable="true" name="rbuf[7:0]">
+                <Signal>rbuf[7]</Signal>
+                <Signal>rbuf[6]</Signal>
+                <Signal>rbuf[5]</Signal>
+                <Signal>rbuf[4]</Signal>
+                <Signal>rbuf[3]</Signal>
+                <Signal>rbuf[2]</Signal>
+                <Signal>rbuf[1]</Signal>
+                <Signal>rbuf[0]</Signal>
+            </Bus>
             <Bus capture_enable="false" name="mdallo[15:0]">
                 <Signal>mdallo[15]</Signal>
                 <Signal>mdallo[14]</Signal>
@@ -252,6 +292,12 @@
                     <Signal>rrdy</Signal>
                     <Signal>xrdy</Signal>
                     <Signal>devsel_n</Signal>
+                    <Bus restorename="a[3:0]">
+                        <Signal>a[3]</Signal>
+                        <Signal>a[2]</Signal>
+                        <Signal>a[1]</Signal>
+                        <Signal>a[0]</Signal>
+                    </Bus>
                 </SignalList>
             </Trigger>
             <Trigger index="1"/>
@@ -271,7 +317,7 @@
             <Trigger index="15"/>
         </Triggers>
         <MatchUnits>
-            <MatchUnit index="0" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="RXX" value1="000" trigger="0"/>
+            <MatchUnit index="0" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="XXF0011" value1="0000000" trigger="0"/>
             <MatchUnit index="1" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="1111111101110100" value1="0000000000000000" trigger="1"/>
             <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
@@ -292,5 +338,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1100111011111111</GAO_ID>
+    <GAO_ID>1100000000110101</GAO_ID>
 </GAO_CONFIG>

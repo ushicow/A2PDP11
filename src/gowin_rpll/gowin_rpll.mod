@@ -7,7 +7,7 @@
 
 -mod_name Gowin_rPLL
 -file_name gowin_rpll
--path C:/Users/ushicow/Desktop/TangNano9K/A2PDP11/src/gowin_rpll/
+-path Z:/Projects/PDP11/A2PDP11/src/gowin_rpll/
 -type PLL
 -rPll true
 -file_type vlg
@@ -15,9 +15,10 @@
 -dyn_idiv_sel false
 -idiv_sel 1
 -dyn_fbdiv_sel false
--fbdiv_sel 3
+-fbdiv_sel 6
 -dyn_odiv_sel false
--odiv_sel 8
+-odiv_sel 4
+-dyn_sdiv_sel 2
 -dyn_da_en true
 -rst_sig false
 -rst_sig_p false
@@ -28,6 +29,7 @@
 -clkout_ft_dir 1
 -en_clkoutp false
 -clkoutp_bypass false
--en_clkoutd false
+-en_clkoutd true
 -clkoutd_bypass false
+-clkoutd_src CLKOUT
 -en_clkoutd3 false

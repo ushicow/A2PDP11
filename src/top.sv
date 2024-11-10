@@ -22,7 +22,7 @@ module top (
     output wire nxm_n,
     input wire sctl_n,
     input wire clk,
-    output reg dv,
+    output reg cont_n,
     output reg miss_n,
     output reg dallo_oe_n,
     output reg event_n,
@@ -89,13 +89,19 @@ Gowin_OSC osc(
     .oscout(sclk) //output oscout
 );
 
-logic clk_x3;   // clk x 3 = 54MHz
+logic clk_x3;   // clk x 3 = 54 MHz
+logic clk_x6;   // clk x 6 = 108 MHz
 Gowin_rPLL rpll(
-    .clkout(clk_x3), //output clkout
+    .clkout(clk_x6), //output clkout
+    .clkoutd(clk_x3), //output clkoutd
     .clkin(clk) //input clkin
 );
 
-logic [7:0] count;
+assign event_n = 1'b1;
+assign irq0 = 1'b0;
+assign irq1 = 1'b0;
+
+logic [2:0] count;
 logic [15:0] mdallo;
 logic [21:0] mdal;
 logic [3:0] maio;
@@ -103,31 +109,32 @@ logic [1:0] mbs;
 logic [7:0] gp_code;
 logic [3:0] aio;
 assign aio = {dal[1], dal[15], dal[14], dal[13]};
+//logic ale0;
+
 always_ff@(posedge clk_x3) begin
-    if (ale_n) begin
-        count <= 0;
-    end else begin
-        if (count == 0) begin
-            dallo_oe_n <= 1'b1;
-            mdallo <= dal;
-        end else if (count == 1) begin
-            if ((aio == GP_READ) || (aio == GP_WRITE)) begin
-                gp_code <= mdallo[7:0];
-            end else begin
-                gp_code <= 8'b11111111;
-            end
-            maio <= aio;
-            mbs[0] <= dal[6];
-            mbs[1] <= dal[7];
-            mdal[21] <= dal[8];
-            mdal[20] <= dal[0];
-            mdal[19] <= dal[9];
-            mdal[18] <= dal[10];
-            mdal[17] <= dal[11];
-            mdal[16] <= dal[12];
-            mdal[15:0] <= mdallo;
-            dallo_oe_n <= 1'b0;
+    if (!ale_n && (count == 7)) begin
+        dallo_oe_n <= 1'b1;
+        mdallo <= dal;
+        count <= 3'b0;
+    end else if (count == 0) begin
+        if ((aio == GP_READ) || (aio == GP_WRITE)) begin
+            gp_code <= mdallo[7:0];
+        end else begin
+            gp_code <= 8'b11111111;
         end
+        maio <= aio;
+        mbs[0] <= dal[6];
+        mbs[1] <= dal[7];
+        mdal[21] <= dal[8];
+        mdal[20] <= dal[0];
+        mdal[19] <= dal[9];
+        mdal[18] <= dal[10];
+        mdal[17] <= dal[11];
+        mdal[16] <= dal[12];
+        mdal[15:0] <= mdallo;
+        dallo_oe_n <= 1'b0;
+        count <= 3'b1;
+    end else if (count < 7) begin
         count <= count + 1'b1;
     end
 end
@@ -141,10 +148,8 @@ logic [7:0] xbuf;
 logic [7:0] rbuf;
 logic xrdy;
 logic rrdy;
-assign d = !rw ? 8'bz :
-    a == A2RCSR ? {rstb, 7'b0} : 
-    a == A2XCSR ? {xstb, 7'b0} : 
-    a == A2XBUF ? xbuf : 8'b0;
+logic [7:0] d0;
+assign d = rw ? d0 : 8'bz;
 
 logic devsel0;
 logic devsel1;
@@ -153,13 +158,25 @@ always_ff@(posedge clk) begin
     devsel1 <= devsel0;
 end
 
-always_ff@(posedge devsel1) begin
-    if (!rw) begin
-        case (a)
-            A2RCSR : rrdy <= d[7];
-            A2RBUF : rbuf <= d;
-            A2XCSR : xrdy <= d[7];
-        endcase
+logic dev_done;
+always_ff@(posedge clk) begin
+    if (devsel1 & !dev_done) begin
+        dev_done <= 1'b1;
+        if (rw) begin
+            case (a)
+                A2RCSR : d0 <= {rstb, 7'b0};
+                A2XCSR : d0 <= {xstb, 7'b0};
+                A2XBUF : d0 <= xbuf;
+            endcase
+        end else begin
+            case (a)
+                A2RCSR : rrdy <= d[7];
+                A2RBUF : rbuf <= d;
+                A2XCSR : xrdy <= d[7];
+            endcase
+        end
+    end else begin
+        dev_done <= 1'b0;
     end
 end
 
@@ -199,7 +216,7 @@ end
 assign dal = bufctl_n ? 16'bz : 
     (mdal == RCSR) ? {8'b0, rdone, 7'b0} :
     (mdal == XCSR) ? {8'b0, xdone, 7'b0} :
-    (mdal == RBUF) ? rbuf :
+    (mdal == RBUF) ? {8'b0, rbuf} :
     (mdal == PRS) ? 16'b1000_0000_0000_0000 :
     (mdal == PRB) ? 16'b0 :
     (mdal == PPS) ? 16'b0000_0000_1000_0000 :
@@ -213,7 +230,7 @@ ram u_ram(
     .*
 );
 
-assign dv = 1'b1;
+assign cont_n = 1'b0;
 logic [21:0] ram_addr;
 logic [15:0] ram_rdata;
 logic [15:0] ram_wdata;
@@ -221,7 +238,7 @@ logic ram_read;
 logic ram_write;
 logic ram_byte;
 always_ff@(posedge clk_x3) begin
-    if ((mbs == BS_MEM) && (count == 2)) begin
+    if ((mbs == BS_MEM) && (count == 1)) begin
         ram_addr <= mdal;
         if ((maio[3:2] == 2'b10) || (maio == REQUEST_READ)) begin
             miss_n <= 1'b0;

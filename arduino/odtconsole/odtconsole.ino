@@ -14,8 +14,8 @@
 #define a1_pin 11   // Address bit 1
 #define a2_pin 12   // Address bit 2
 #define a3_pin 13   // Address bit 3
-#define rw_pin 14   // R/W
-#define ds_pin 15   // /DEVSEL
+#define rw_pin 14   // A10 R/W
+#define ds_pin 15   // A11 /DEVSEL
 #define A2RCSR 0    // Receiver Status; Read = rstb, Write = rrdy
 #define A2RBUF 1    // Reciver Buffer Register
 #define A2XCSR 2    // Transmitter Status; Read = xstb, Write = xrdy
