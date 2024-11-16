@@ -13,7 +13,7 @@
 
 module top ( 
     inout wire [15:0] dal,          // DAL<21:0>, BS<1:0>
-    input wire [3:0] a,             // Apple II Address A<3:0>
+    input wire [3:0] aio,           // AIO<3:0>
     inout wire [7:0] d,             // Apple II Data D<7:0>
     input wire devsel_n,            // Apple II /DEVSEL
     input wire rw,                  // Apple II R/W
@@ -101,40 +101,43 @@ assign event_n = 1'b1;
 assign irq0 = 1'b0;
 assign irq1 = 1'b0;
 
-logic [2:0] count;
+logic [3:0] count;
 logic [15:0] mdallo;
 logic [21:0] mdal;
 logic [3:0] maio;
 logic [1:0] mbs;
 logic [7:0] gp_code;
-logic [3:0] aio;
-assign aio = {dal[1], dal[15], dal[14], dal[13]};
-//logic ale0;
+logic [3:0] a;
 
 always_ff@(posedge clk_x3) begin
-    if (!ale_n && (count == 7)) begin
-        dallo_oe_n <= 1'b1;
-        mdallo <= dal;
-        count <= 3'b0;
-    end else if (count == 0) begin
-        if ((aio == GP_READ) || (aio == GP_WRITE)) begin
-            gp_code <= mdallo[7:0];
-        end else begin
-            gp_code <= 8'b11111111;
+    if (ale_n) begin
+        count <= 0;
+    end else begin
+        if (count == 0) begin
+            dallo_oe_n <= 1'b1;
+            mdallo <= dal;
+        end else if (count == 1) begin
+            if ((aio == GP_READ) || (aio == GP_WRITE)) begin
+                gp_code <= mdallo[7:0];
+            end else begin
+                gp_code <= 8'b11111111;
+            end
+            maio <= aio;
+            mbs[0] <= dal[6];
+            mbs[1] <= dal[7];
+            mdal[21] <= dal[8];
+            mdal[20] <= dal[0];
+            mdal[19] <= dal[9];
+            mdal[18] <= dal[10];
+            mdal[17] <= dal[11];
+            mdal[16] <= dal[12];
+            mdal[15:0] <= mdallo;
+            a[0] <= dal[13];
+            a[1] <= dal[14];
+            a[2] <= 0;
+            a[3] <= 0;
+            dallo_oe_n <= 1'b0;
         end
-        maio <= aio;
-        mbs[0] <= dal[6];
-        mbs[1] <= dal[7];
-        mdal[21] <= dal[8];
-        mdal[20] <= dal[0];
-        mdal[19] <= dal[9];
-        mdal[18] <= dal[10];
-        mdal[17] <= dal[11];
-        mdal[16] <= dal[12];
-        mdal[15:0] <= mdallo;
-        dallo_oe_n <= 1'b0;
-        count <= 3'b1;
-    end else if (count < 7) begin
         count <= count + 1'b1;
     end
 end
@@ -160,23 +163,25 @@ end
 
 logic dev_done;
 always_ff@(posedge clk) begin
-    if (devsel1 & !dev_done) begin
-        dev_done <= 1'b1;
-        if (rw) begin
-            case (a)
-                A2RCSR : d0 <= {rstb, 7'b0};
-                A2XCSR : d0 <= {xstb, 7'b0};
-                A2XBUF : d0 <= xbuf;
-            endcase
-        end else begin
-            case (a)
-                A2RCSR : rrdy <= d[7];
-                A2RBUF : rbuf <= d;
-                A2XCSR : xrdy <= d[7];
-            endcase
+    if (devsel1) begin
+        if (dev_done) begin;
+            if (rw) begin
+                case (a)
+                    A2RCSR : d0 <= {rstb, 7'b0};
+                    A2XCSR : d0 <= {xstb, 7'b0};
+                    A2XBUF : d0 <= xbuf;
+                endcase
+            end else begin
+                case (a)
+                    A2RCSR : rrdy <= d[7];
+                    A2RBUF : rbuf <= d;
+                    A2XCSR : xrdy <= d[7];
+                endcase
+            end
+            dev_done <= 1'b0;
         end
     end else begin
-        dev_done <= 1'b0;
+        dev_done <= 1'b1;
     end
 end
 
@@ -190,9 +195,9 @@ always_ff@(negedge clk) begin
         xstb <= 1'b1;
         xdone <= 1'b0;
         xbuf <= dal[7:0];
-    end else if (!xrdy) begin
+    end else if (xstb & !xrdy) begin
         xstb <= 1'b0;
-    end else if (!xstb) begin
+    end else if (!xstb & xrdy) begin
         xdone <= 1'b1;
     end
 end
@@ -238,7 +243,7 @@ logic ram_read;
 logic ram_write;
 logic ram_byte;
 always_ff@(posedge clk_x3) begin
-    if ((mbs == BS_MEM) && (count == 1)) begin
+    if ((mbs == BS_MEM) && (count == 2)) begin
         ram_addr <= mdal;
         if ((maio[3:2] == 2'b10) || (maio == REQUEST_READ)) begin
             miss_n <= 1'b0;

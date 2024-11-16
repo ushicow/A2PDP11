@@ -1,0 +1,470 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0DB29FD32CE36142001D3A36 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0DB29FCD2CE36142001D3A36 /* a2tape */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = a2tape; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DB29FD02CE36142001D3A36 /* a2tape.dsk */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = a2tape.dsk; sourceTree = BUILT_PRODUCTS_DIR; };
+		0DB29FD52CE36142001D3A36 /* doNotBuild */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = doNotBuild; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		0DB29FF52CE36142001D3A36 /* Exceptions for "a2tape" folder in "Copy Files" phase from "doNotBuild" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 0DB29FD32CE36142001D3A36 /* CopyFiles */;
+			membershipExceptions = (
+				make/bt,
+				make/createDiskImage,
+				make/DevApple.vii,
+				make/dos33_template.dsk,
+				make/errorFilter.sh,
+				make/head.mk,
+				make/prodos_template.dsk,
+				make/tail.mk,
+				make/V2Make.scpt,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		0DB29FD62CE36142001D3A36 /* a2tape */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0DB29FF52CE36142001D3A36 /* Exceptions for "a2tape" folder in "Copy Files" phase from "doNotBuild" target */,
+			);
+			path = a2tape;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0DB29FD22CE36142001D3A36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0DB29FC62CE36142001D3A36 = {
+			isa = PBXGroup;
+			children = (
+				0DB29FD62CE36142001D3A36 /* a2tape */,
+				0DB29FCE2CE36142001D3A36 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0DB29FCE2CE36142001D3A36 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0DB29FCD2CE36142001D3A36 /* a2tape */,
+				0DB29FD02CE36142001D3A36 /* a2tape.dsk */,
+				0DB29FD52CE36142001D3A36 /* doNotBuild */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		0DB29FCB2CE36142001D3A36 /* a2tape */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "-C a2tape $(ACTION)";
+			buildConfigurationList = 0DB29FF82CE36142001D3A36 /* Build configuration list for PBXLegacyTarget "a2tape" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0DB29FD62CE36142001D3A36 /* a2tape */,
+			);
+			name = a2tape;
+			packageProductDependencies = (
+			);
+			passBuildSettingsInEnvironment = 1;
+			productName = a2tape;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXNativeTarget section */
+		0DB29FCC2CE36142001D3A36 /* Binary */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0DB29FFB2CE36142001D3A36 /* Build configuration list for PBXNativeTarget "Binary" */;
+			buildPhases = (
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0DB29FD62CE36142001D3A36 /* a2tape */,
+			);
+			name = Binary;
+			packageProductDependencies = (
+			);
+			productName = Binary;
+			productReference = 0DB29FCD2CE36142001D3A36 /* a2tape */;
+			productType = "com.apple.product-type.tool";
+		};
+		0DB29FCF2CE36142001D3A36 /* DiskImage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0DB29FFE2CE36142001D3A36 /* Build configuration list for PBXNativeTarget "DiskImage" */;
+			buildPhases = (
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0DB29FD62CE36142001D3A36 /* a2tape */,
+			);
+			name = DiskImage;
+			packageProductDependencies = (
+			);
+			productName = DiskImage;
+			productReference = 0DB29FD02CE36142001D3A36 /* a2tape.dsk */;
+			productType = "com.apple.product-type.tool";
+		};
+		0DB29FD42CE36142001D3A36 /* doNotBuild */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0DB2A0012CE36142001D3A36 /* Build configuration list for PBXNativeTarget "doNotBuild" */;
+			buildPhases = (
+				0DB29FD12CE36142001D3A36 /* Sources */,
+				0DB29FD22CE36142001D3A36 /* Frameworks */,
+				0DB29FD32CE36142001D3A36 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				0DB29FD62CE36142001D3A36 /* a2tape */,
+			);
+			name = doNotBuild;
+			packageProductDependencies = (
+			);
+			productName = doNotBuild;
+			productReference = 0DB29FD52CE36142001D3A36 /* doNotBuild */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0DB29FC72CE36142001D3A36 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					0DB29FCB2CE36142001D3A36 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					0DB29FCC2CE36142001D3A36 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					0DB29FCF2CE36142001D3A36 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+					0DB29FD42CE36142001D3A36 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+				};
+			};
+			buildConfigurationList = 0DB29FCA2CE36142001D3A36 /* Build configuration list for PBXProject "a2tape" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0DB29FC62CE36142001D3A36;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 0DB29FCE2CE36142001D3A36 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0DB29FCB2CE36142001D3A36 /* a2tape */,
+				0DB29FCC2CE36142001D3A36 /* Binary */,
+				0DB29FCF2CE36142001D3A36 /* DiskImage */,
+				0DB29FD42CE36142001D3A36 /* doNotBuild */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0DB29FD12CE36142001D3A36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0DB29FF62CE36142001D3A36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+			};
+			name = Debug;
+		};
+		0DB29FF72CE36142001D3A36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+			};
+			name = Release;
+		};
+		0DB29FF92CE36142001D3A36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		0DB29FFA2CE36142001D3A36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		0DB29FFC2CE36142001D3A36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = a2tape;
+			};
+			name = Debug;
+		};
+		0DB29FFD2CE36142001D3A36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = a2tape;
+			};
+			name = Release;
+		};
+		0DB29FFF2CE36142001D3A36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = a2tape.dsk;
+			};
+			name = Debug;
+		};
+		0DB2A0002CE36142001D3A36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = a2tape.dsk;
+			};
+			name = Release;
+		};
+		0DB2A0022CE36142001D3A36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_PREPROCESSOR_DEFINITIONS = "__fastcall__=\"\"";
+				HEADER_SEARCH_PATHS = (
+					$TEMP_ROOT/a2tape.build/$CONFIGURATION/a2tape.build/DerivedSources,
+					/usr/local/share/cc65/include,
+				);
+				PRODUCT_NAME = doNotBuild;
+			};
+			name = Debug;
+		};
+		0DB2A0032CE36142001D3A36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_PREPROCESSOR_DEFINITIONS = "__fastcall__=\"\"";
+				HEADER_SEARCH_PATHS = (
+					$TEMP_ROOT/a2tape.build/$CONFIGURATION/a2tape.build/DerivedSources,
+					/usr/local/share/cc65/include,
+				);
+				PRODUCT_NAME = doNotBuild;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0DB29FCA2CE36142001D3A36 /* Build configuration list for PBXProject "a2tape" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DB29FF62CE36142001D3A36 /* Debug */,
+				0DB29FF72CE36142001D3A36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0DB29FF82CE36142001D3A36 /* Build configuration list for PBXLegacyTarget "a2tape" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DB29FF92CE36142001D3A36 /* Debug */,
+				0DB29FFA2CE36142001D3A36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0DB29FFB2CE36142001D3A36 /* Build configuration list for PBXNativeTarget "Binary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DB29FFC2CE36142001D3A36 /* Debug */,
+				0DB29FFD2CE36142001D3A36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0DB29FFE2CE36142001D3A36 /* Build configuration list for PBXNativeTarget "DiskImage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DB29FFF2CE36142001D3A36 /* Debug */,
+				0DB2A0002CE36142001D3A36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0DB2A0012CE36142001D3A36 /* Build configuration list for PBXNativeTarget "doNotBuild" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DB2A0022CE36142001D3A36 /* Debug */,
+				0DB2A0032CE36142001D3A36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0DB29FC72CE36142001D3A36 /* Project object */;
+}

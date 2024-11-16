@@ -11,9 +11,7 @@
         <File path="src/psram_memory_interface_hs_2ch_v2/psram_memory_interface_hs_2ch_v2.v" type="file.verilog" enable="1"/>
         <File path="src/ram.sv" type="file.verilog" enable="1"/>
         <File path="src/top.sv" type="file.verilog" enable="1"/>
-        <File path="src/pin13.cst" type="file.cst" enable="0"/>
-        <File path="src/pin14.cst" type="file.cst" enable="0"/>
-        <File path="src/pin15.cst" type="file.cst" enable="1"/>
+        <File path="src/pin16.cst" type="file.cst" enable="1"/>
         <File path="src/A2PDP11.sdc" type="file.sdc" enable="1"/>
         <File path="src/test10.rao" type="file.gao" enable="0"/>
         <File path="src/test12.rao" type="file.gao" enable="0"/>
