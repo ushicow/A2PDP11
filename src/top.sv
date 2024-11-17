@@ -10,6 +10,7 @@
 // TEST9 2024.09.03 Byte Data Write
 // TEST10 2024.09.13 Paper Tape Reader/Punch dummy response
 // TEST11 2024.09.21 Modify read timing
+// TEST17 2024.11.17 Apple II Interface
 
 module top ( 
     inout wire [15:0] dal,          // DAL<21:0>, BS<1:0>
@@ -79,10 +80,10 @@ parameter PPB           = 22'o17777556; // Paper Tape Punch Buffer Register
 parameter HIMEM         = 22'o17757777; // End of RAM
 
 // Apple II Register
-parameter A2RCSR        = 4'h0;         // Console out status; Read = rstb, Write = rrdy
-parameter A2RBUF        = 4'h1;         // Cousole out data
-parameter A2XCSR        = 4'h2;         // Console in status; Read = xstb, Write = xrdy  
-parameter A2XBUF        = 4'h3;         // Console in data
+parameter A2RCSR        = 8'h00;         // Console out status; Read = rstb, Write = rrdy
+parameter A2RBUF        = 8'h01;         // Cousole out data
+parameter A2XCSR        = 8'h02;         // Console in status; Read = xstb, Write = xrdy  
+parameter A2XBUF        = 8'h03;         // Console in data
 
 logic sclk;
 Gowin_OSC osc(
@@ -107,7 +108,7 @@ logic [21:0] mdal;
 logic [3:0] maio;
 logic [1:0] mbs;
 logic [7:0] gp_code;
-logic [3:0] a;
+logic [7:0] a;
 
 always_ff@(posedge clk_x3) begin
     if (ale_n) begin
@@ -132,10 +133,15 @@ always_ff@(posedge clk_x3) begin
             mdal[17] <= dal[11];
             mdal[16] <= dal[12];
             mdal[15:0] <= mdallo;
-            a[0] <= dal[13];
-            a[1] <= dal[14];
-            a[2] <= 0;
-            a[3] <= 0;
+        end else if (count == 2) begin
+            a[0] <= dal[5];
+            a[1] <= dal[4];
+            a[2] <= dal[3];
+            a[3] <= dal[2];
+            a[4] <= dal[1];
+            a[5] <= dal[15];
+            a[6] <= dal[14];
+            a[7] <= dal[13];
             dallo_oe_n <= 1'b0;
         end
         count <= count + 1'b1;

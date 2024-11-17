@@ -6,16 +6,16 @@
  * Copyright (c) 2024 ___ORGANIZATIONNAME___. All rights reserved.
  *
  */
-
+// TEST17
 
 #include <stdio.h>
 #include <conio.h>
 #include <peekpoke.h>
 
-#define RCSR 0xc0f0
-#define RBUF 0xc0f1
-#define XCSR 0xc0f2
-#define XBUF 0xc0f3
+#define RCSR 0xc700
+#define RBUF 0xc701
+#define XCSR 0xc702
+#define XBUF 0xc703
 
 int main(void)
 {

@@ -15,6 +15,6 @@
         <File path="src/A2PDP11.sdc" type="file.sdc" enable="1"/>
         <File path="src/test10.rao" type="file.gao" enable="0"/>
         <File path="src/test12.rao" type="file.gao" enable="0"/>
-        <File path="src/test14.rao" type="file.gao" enable="1"/>
+        <File path="src/test14.rao" type="file.gao" enable="0"/>
     </FileList>
 </Project>
