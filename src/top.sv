@@ -80,10 +80,10 @@ parameter PPB           = 22'o17777556; // Paper Tape Punch Buffer Register
 parameter HIMEM         = 22'o17757777; // End of RAM
 
 // Apple II Register
-parameter A2RCSR        = 4'h0;         // Console out status; Read = rstb, Write = rrdy
-parameter A2RBUF        = 4'h1;         // Cousole out data
-parameter A2XCSR        = 4'h2;         // Console in status; Read = xstb, Write = xrdy  
-parameter A2XBUF        = 4'h3;         // Console in data
+parameter A2RCSR        = 8'h00;         // Console out status; Read = rstb, Write = rrdy
+parameter A2RBUF        = 8'h01;         // Cousole out data
+parameter A2XCSR        = 8'h02;         // Console in status; Read = xstb, Write = xrdy  
+parameter A2XBUF        = 8'h03;         // Console in data
 
 logic clk_x3;   // clk x 3 = 54 MHz
 Gowin_rPLL rpll(

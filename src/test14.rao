@@ -2,7 +2,11 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
+<<<<<<< HEAD
     <AoCore index="0" sample_clock="clk_x3" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+=======
+    <AoCore index="0" sample_clock="clk_x6" trig_type="0" storage_depth="256" window_num="1" capture_amount="256" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+>>>>>>> dc711b61a05bcb1e99db3f37094783c9cb81425a
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="maio[3:0]">
@@ -226,7 +230,11 @@
             <Expression>M1</Expression>
         </Expressions>
     </AoCore>
+<<<<<<< HEAD
     <AoCore index="1" sample_clock="clk_x3" trig_type="0" storage_depth="2048" window_num="1" capture_amount="2048" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+=======
+    <AoCore index="1" sample_clock="clk_x3" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+>>>>>>> dc711b61a05bcb1e99db3f37094783c9cb81425a
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="a[7:0]">
@@ -338,5 +346,9 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
+<<<<<<< HEAD
     <GAO_ID>0011011111001110</GAO_ID>
+=======
+    <GAO_ID>1111111001111010</GAO_ID>
+>>>>>>> dc711b61a05bcb1e99db3f37094783c9cb81425a
 </GAO_CONFIG>
