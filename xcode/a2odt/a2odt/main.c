@@ -6,7 +6,7 @@
  * Copyright (c) 2024 ___ORGANIZATIONNAME___. All rights reserved.
  *
  */
-
+// TEST17
 
 #include <stdio.h>
 #include <conio.h>
@@ -21,6 +21,7 @@ int main(void)
 {
     unsigned char rdata;
     unsigned char wdata = 0;
+    char dummy;
     
     printf("Serial Start\n");
     cursor(1);
@@ -36,6 +37,13 @@ int main(void)
         } else if (kbhit()) {
             wdata = cgetc();
             POKE(RCSR, 128);
+            if (wdata == 3) {   // control-C
+                puts("HALT");
+                dummy = PEEK(0xC700);
+            }
+            if (wdata == 24) {  // control-X
+                return(0);
+            }
         } else {
             POKE(XCSR, 128);        // xrdy <= 0
         }

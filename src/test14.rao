@@ -2,7 +2,7 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="clk_x6" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="0" sample_clock="clk_x3" trig_type="0" storage_depth="4096" window_num="1" capture_amount="4096" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="maio[3:0]">
@@ -226,10 +226,14 @@
             <Expression>M1</Expression>
         </Expressions>
     </AoCore>
-    <AoCore index="1" sample_clock="clk" trig_type="0" storage_depth="256" window_num="1" capture_amount="256" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="1" sample_clock="clk_x3" trig_type="0" storage_depth="2048" window_num="1" capture_amount="2048" implementation="0" trigger_pos="100" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
-            <Bus capture_enable="true" name="a[3:0]">
+            <Bus capture_enable="true" name="a[7:0]">
+                <Signal>a[7]</Signal>
+                <Signal>a[6]</Signal>
+                <Signal>a[5]</Signal>
+                <Signal>a[4]</Signal>
                 <Signal>a[3]</Signal>
                 <Signal>a[2]</Signal>
                 <Signal>a[1]</Signal>
@@ -245,6 +249,7 @@
                 <Signal>d[1]</Signal>
                 <Signal>d[0]</Signal>
             </Bus>
+            <Signal capture_enable="true">dallo_oe_n</Signal>
             <Signal capture_enable="true">devsel_n</Signal>
             <Signal capture_enable="true">rw</Signal>
             <Signal capture_enable="true">xrdy</Signal>
@@ -278,7 +283,6 @@
                 <Signal>rbuf[1]</Signal>
                 <Signal>rbuf[0]</Signal>
             </Bus>
-            <Signal capture_enable="true">dallo_oe_n</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -334,5 +338,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1000001011010110</GAO_ID>
+    <GAO_ID>0011011111001110</GAO_ID>
 </GAO_CONFIG>
