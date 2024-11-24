@@ -1,21 +1,21 @@
 //Copyright (C)2014-2024 Gowin Semiconductor Corporation.
 //All rights reserved.
 //File Title: IP file
-//Tool Version: V1.9.10.01 (64-bit)
+//Tool Version: V1.9.10.03 (64-bit)
 //Part Number: GW1NR-LV9QN88PC6/I5
 //Device: GW1NR-9
 //Device Version: C
-//Created Time: Sun Sep 15 13:24:36 2024
+//Created Time: Sun Nov 24 13:46:31 2024
 
-module Gowin_rPLL_ram (clkout, lock, clkoutp, clkoutd, clkin);
+module Gowin_rPLL_ram (clkout, lock, clkoutp, clkoutd, clkoutd3, clkin);
 
 output clkout;
 output lock;
 output clkoutp;
 output clkoutd;
+output clkoutd3;
 input clkin;
 
-wire clkoutd3_o;
 wire gw_vcc;
 wire gw_gnd;
 
@@ -27,7 +27,7 @@ rPLL rpll_inst (
     .LOCK(lock),
     .CLKOUTP(clkoutp),
     .CLKOUTD(clkoutd),
-    .CLKOUTD3(clkoutd3_o),
+    .CLKOUTD3(clkoutd3),
     .RESET(gw_gnd),
     .RESET_P(gw_gnd),
     .CLKIN(clkin),
@@ -40,11 +40,11 @@ rPLL rpll_inst (
     .FDLY({gw_vcc,gw_vcc,gw_vcc,gw_vcc})
 );
 
-defparam rpll_inst.FCLKIN = "27";
+defparam rpll_inst.FCLKIN = "18";
 defparam rpll_inst.DYN_IDIV_SEL = "false";
-defparam rpll_inst.IDIV_SEL = 8;
+defparam rpll_inst.IDIV_SEL = 0;
 defparam rpll_inst.DYN_FBDIV_SEL = "false";
-defparam rpll_inst.FBDIV_SEL = 54;
+defparam rpll_inst.FBDIV_SEL = 8;
 defparam rpll_inst.DYN_ODIV_SEL = "false";
 defparam rpll_inst.ODIV_SEL = 4;
 defparam rpll_inst.PSDA_SEL = "0100";

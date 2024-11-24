@@ -1,11 +1,11 @@
 //Copyright (C)2014-2024 Gowin Semiconductor Corporation.
 //All rights reserved.
 //File Title: IP file
-//Tool Version: V1.9.10.02
+//Tool Version: V1.9.10.03 (64-bit)
 //Part Number: GW1NR-LV9QN88PC6/I5
 //Device: GW1NR-9
 //Device Version: C
-//Created Time: Sun Nov 17 13:26:49 2024
+//Created Time: Sat Nov 23 20:34:15 2024
 
 module Gowin_rPLL (clkout, clkin);
 
@@ -42,7 +42,7 @@ defparam rpll_inst.FCLKIN = "18";
 defparam rpll_inst.DYN_IDIV_SEL = "false";
 defparam rpll_inst.IDIV_SEL = 0;
 defparam rpll_inst.DYN_FBDIV_SEL = "false";
-defparam rpll_inst.FBDIV_SEL = 2;
+defparam rpll_inst.FBDIV_SEL = 3;
 defparam rpll_inst.DYN_ODIV_SEL = "false";
 defparam rpll_inst.ODIV_SEL = 8;
 defparam rpll_inst.PSDA_SEL = "0000";

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0830"
+   LastUpgradeVersion = "1610"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9D0B917C1F526C2D004D7E0B"
+               BlueprintIdentifier = "0DB29FCB2CE36142001D3A36"
                BuildableName = "a2tape"
                BlueprintName = "a2tape"
                ReferencedContainer = "container:a2tape.xcodeproj">
@@ -29,8 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -49,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9D0B917C1F526C2D004D7E0B"
+            BlueprintIdentifier = "0DB29FCB2CE36142001D3A36"
             BuildableName = "a2tape"
             BlueprintName = "a2tape"
             ReferencedContainer = "container:a2tape.xcodeproj">
@@ -81,8 +79,6 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -93,7 +89,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9D0B917C1F526C2D004D7E0B"
+            BlueprintIdentifier = "0DB29FCB2CE36142001D3A36"
             BuildableName = "a2tape"
             BlueprintName = "a2tape"
             ReferencedContainer = "container:a2tape.xcodeproj">

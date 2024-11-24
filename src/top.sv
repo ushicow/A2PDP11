@@ -1,15 +1,4 @@
 `default_nettype none
-// DCJ11 TangNano interface by nanja.info
-// TEST2 2024.07.28 Bus read
-// TSET3 2024.08.03 Start-Up config
-// TEST4 2024.08.07 NXM abort signal
-// TEST5 2024.08.12 Console ODT output
-// TEST6 2024.08.25 Console ODT input
-// TEST7 2024.08.26 2KB RAM
-// TEST8 2024.08.31 4MB RAM
-// TEST9 2024.09.03 Byte Data Write
-// TEST10 2024.09.13 Paper Tape Reader/Punch dummy response
-// TEST11 2024.09.21 Modify read timing
 // TEST17 2024.11.17 Apple II Interface
 
 module top ( 
@@ -86,22 +75,22 @@ parameter A2XCSR        = 8'h02;         // Console in status; Read = xstb, Writ
 parameter A2XBUF        = 8'h03;         // Console in data
 
 logic clk_x3;   // clk x 3 = 54 MHz
-Gowin_rPLL rpll(
-    .clkout(clk_x3), //output clkout
-    .clkin(clk) //input clkin
-);
+//Gowin_rPLL rpll(
+//    .clkout(clk_x3), //output clkout
+//    .clkin(clk) //input clkin
+//);
 
 assign event_n = 1'b1;
 assign irq0 = 1'b0;
 assign irq1 = 1'b0;
 
-logic [3:0] count;
+logic [4:0] count;
 logic [15:0] mdallo;
 logic [21:0] mdal;
 logic [3:0] maio;
 logic [1:0] mbs;
 logic [7:0] gp_code;
-logic [7:0] a;
+logic [7:0] a;              // Apple II Address
 
 always_ff@(posedge clk_x3) begin
     if (ale_n) begin
@@ -110,7 +99,7 @@ always_ff@(posedge clk_x3) begin
         if (count == 0) begin
             dallo_oe_n <= 1'b1;
             mdallo <= dal;
-        end else if (count == 1) begin
+        end else if (count == 2) begin
             if ((aio == GP_READ) || (aio == GP_WRITE)) begin
                 gp_code <= mdallo[7:0];
             end else begin
@@ -126,7 +115,7 @@ always_ff@(posedge clk_x3) begin
             mdal[17] <= dal[11];
             mdal[16] <= dal[12];
             mdal[15:0] <= mdallo;
-        end else if (count == 2) begin
+//        end else if (count == 2) begin
             a[0] <= dal[5];
             a[1] <= dal[4];
             a[2] <= dal[3];
@@ -162,6 +151,7 @@ always_ff@(posedge clk) begin
 end
 
 logic dev_done;
+logic error;
 always_ff@(posedge clk) begin
     if (devsel1) begin
         if (dev_done) begin;
@@ -176,18 +166,20 @@ always_ff@(posedge clk) begin
                     A2RCSR : rrdy <= d[7];
                     A2RBUF : rbuf <= d;
                     A2XCSR : xrdy <= d[7];
+                    8'h0f  : error <= 1'b1;
                 endcase
             end
             dev_done <= 1'b0;
         end
     end else begin
         dev_done <= 1'b1;
+        error <= 1'b0;
     end
 end
 
 logic xdone;
 logic xstb;
-always_ff@(negedge clk) begin
+always_ff@(posedge clk) begin
     if (gp_code == 8'o014) begin
         xdone <= 1'b1;
         xstb <= 1'b0;
@@ -204,7 +196,7 @@ end
 
 logic rdone;
 logic rstb;
-always_ff@(negedge clk) begin
+always_ff@(posedge clk) begin
     if (gp_code == 8'o014) begin
         rdone <= 1'b0;
         rstb <= 1'b0;
@@ -243,7 +235,7 @@ logic ram_read;
 logic ram_write;
 logic ram_byte;
 always_ff@(posedge clk_x3) begin
-    if ((mbs == BS_MEM) && (count == 2)) begin
+    if ((mbs == BS_MEM) && (count == 3)) begin
         ram_addr <= mdal;
         if ((maio[3:2] == 2'b10) || (maio == REQUEST_READ)) begin
             miss_n <= 1'b0;
