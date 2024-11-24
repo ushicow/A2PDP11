@@ -19,7 +19,8 @@ module ram (
     input wire [21:0] ram_addr,
     output reg [15:0] ram_rdata,
     input wire [15:0] ram_wdata,
-    input wire mclk,
+    input wire clk,
+    output reg clk_x3,
     input wire rst_n,
     output wire init
 );
@@ -31,7 +32,8 @@ Gowin_rPLL_ram pll_ram(
     .lock(pll_lock), //output lock
     .clkoutp(memory_clk_p), //output clkoutp
     .clkoutd(clk_d), //output clkoutd
-    .clkin(mclk) //input clkin
+    .clkoutd3(clk_x3), //output clkoutd3
+    .clkin(clk) //input clkin    .clkout(memory_clk), //output clkout
 );
 
 logic clk_d;
