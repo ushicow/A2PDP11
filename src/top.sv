@@ -145,15 +145,13 @@ assign d = rw ? d0 : 8'bz;
 
 logic devsel0;
 logic devsel1;
-//always_ff@(posedge clk) begin
 always_ff@(posedge clk_x3) begin
-      devsel0 <= !devsel_n;
+    devsel0 <= !devsel_n;
     devsel1 <= devsel0;
 end
 
 logic dev_done;
 logic error;
-//always_ff@(posedge clk) begin
 always_ff@(posedge clk_x3) begin
     if (devsel1) begin
         if (dev_done) begin;
@@ -181,7 +179,6 @@ end
 
 logic xdone;
 logic xstb;
-//always_ff@(posedge clk) begin
 always_ff@(posedge clk_x3) begin
     if (gp_code == 8'o014) begin
         xdone <= 1'b1;
@@ -199,7 +196,6 @@ end
 
 logic rdone;
 logic rstb;
-//always_ff@(posedge clk) begin
 always_ff@(posedge clk_x3) begin
     if (gp_code == 8'o014) begin
         rdone <= 1'b0;
@@ -251,7 +247,6 @@ always_ff@(posedge clk_x3) begin
     end
 end
 
-//always_ff@(posedge clk) begin
 always_ff@(posedge clk_x3) begin
     if ((mbs == BS_MEM) && (maio[3:2] == 2'b00) && (!sctl_n)) begin
         if (maio == BYTE_WRITE) begin
