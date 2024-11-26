@@ -1,5 +1,6 @@
 `default_nettype none
-// TEST17 2024.11.17 Apple II Interface
+// DCJ11 TangNano interface by nanja.info
+// TEST18 2024.11.24 Use Extarnal clock
 
 module top ( 
     inout wire [15:0] dal,          // DAL<21:0>, BS<1:0>
@@ -115,7 +116,6 @@ always_ff@(posedge clk_x3) begin
             mdal[17] <= dal[11];
             mdal[16] <= dal[12];
             mdal[15:0] <= mdallo;
-//        end else if (count == 2) begin
             a[0] <= dal[5];
             a[1] <= dal[4];
             a[2] <= dal[3];
@@ -145,14 +145,16 @@ assign d = rw ? d0 : 8'bz;
 
 logic devsel0;
 logic devsel1;
-always_ff@(posedge clk) begin
-    devsel0 <= !devsel_n;
+//always_ff@(posedge clk) begin
+always_ff@(posedge clk_x3) begin
+      devsel0 <= !devsel_n;
     devsel1 <= devsel0;
 end
 
 logic dev_done;
 logic error;
-always_ff@(posedge clk) begin
+//always_ff@(posedge clk) begin
+always_ff@(posedge clk_x3) begin
     if (devsel1) begin
         if (dev_done) begin;
             if (rw) begin
@@ -179,7 +181,8 @@ end
 
 logic xdone;
 logic xstb;
-always_ff@(posedge clk) begin
+//always_ff@(posedge clk) begin
+always_ff@(posedge clk_x3) begin
     if (gp_code == 8'o014) begin
         xdone <= 1'b1;
         xstb <= 1'b0;
@@ -196,7 +199,8 @@ end
 
 logic rdone;
 logic rstb;
-always_ff@(posedge clk) begin
+//always_ff@(posedge clk) begin
+always_ff@(posedge clk_x3) begin
     if (gp_code == 8'o014) begin
         rdone <= 1'b0;
         rstb <= 1'b0;
@@ -247,7 +251,8 @@ always_ff@(posedge clk_x3) begin
     end
 end
 
-always_ff@(posedge clk) begin
+//always_ff@(posedge clk) begin
+always_ff@(posedge clk_x3) begin
     if ((mbs == BS_MEM) && (maio[3:2] == 2'b00) && (!sctl_n)) begin
         if (maio == BYTE_WRITE) begin
             ram_byte <= 1'b1;

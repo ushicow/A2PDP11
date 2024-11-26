@@ -5,6 +5,7 @@
 // TEST9 2024.09.03 Byte Data Write
 // TEST10 2024.09.13 Add rst_n and init interface
 // TEST11 2024.09.20 Modify read timing
+// TEST18 2024.11.24 Use external clock
 
 module ram (
     output wire [1:0] O_psram_ck,
@@ -33,7 +34,7 @@ Gowin_rPLL_ram pll_ram(
     .clkoutp(memory_clk_p), //output clkoutp
     .clkoutd(clk_d), //output clkoutd
     .clkoutd3(clk_x3), //output clkoutd3
-    .clkin(clk) //input clkin    .clkout(memory_clk), //output clkout
+    .clkin(clk) //input clkin
 );
 
 logic clk_d;
