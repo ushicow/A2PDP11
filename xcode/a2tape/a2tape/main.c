@@ -12,30 +12,12 @@
 #include <peekpoke.h>
 #include <stdint.h>
 
-#define RCSR 0xc0f0
-#define RBUF 0xc0f1
-#define XCSR 0xc0f2
-#define XBUF 0xc0f3
-#define ERROR 0xc0ff
-
-int PutChar(uint8_t wdata) {
-    uint8_t rdata;
-    
-    POKE(RCSR, 128);            // rrdy <= 1
-    while (PEEK(RCSR) < 128);   // rstb == 1
-    POKE(RBUF, wdata);
-    POKE(RCSR, 0);              // rrdy <= 0
-    POKE(XCSR, 128);
-    while (PEEK(XCSR) < 128);   // xstb == 1
-    POKE(XCSR, 0);
-    rdata = PEEK(XBUF);
-    if (rdata != wdata) {
-        POKE(ERROR, rdata);
-        printf("\n%x=%x\n", rdata, wdata);
-    }
-//    putchar(rdata);
-    return (rdata != wdata);
-}
+#define SLOT    7
+#define RCSR    (0xc080 + SLOT * 0x10)
+#define RBUF    (0xc081 + SLOT * 0x10)
+#define XCSR    (0xc082 + SLOT * 0x10)
+#define XBUF    (0xc083 + SLOT * 0x10)
+#define ERROR   (0xc08f + SLOT * 0x10)
 
 int SkipHeader(FILE *tape)
 {
@@ -73,6 +55,25 @@ int GetWord(FILE *tape) {
     return l;
 }
 
+int PutChar(uint8_t wdata) {
+    uint8_t rdata;
+    
+    POKE(RCSR, 128);            // rrdy <= 1
+    while (PEEK(RCSR) < 128);   // rstb == 1
+    POKE(RBUF, wdata);
+    POKE(RCSR, 0);              // rrdy <= 0
+    POKE(XCSR, 128);            // xrdy <= 1
+    while (PEEK(XCSR) < 128);   // xstb == 1
+    POKE(XCSR, 0);              // xrdy <= 0
+    rdata = PEEK(XBUF);
+    if (rdata != wdata) {
+        POKE(ERROR, rdata);
+        printf("\n%x=%x\n", rdata, wdata);
+    }
+//    putchar(rdata);
+    return (rdata != wdata);
+}
+
 int PutAddress(uint16_t addr)  {
     int i;
     int rdata;
@@ -86,9 +87,9 @@ int PutAddress(uint16_t addr)  {
     }
     PutChar('/');
     for (i = 0; i < 7; ++i) {
-        POKE(XCSR, 128);
+        POKE(XCSR, 128);            // xrdy <= 1
         while (PEEK(XCSR) < 128);   // xstb == 1
-        POKE(XCSR, 0);
+        POKE(XCSR, 0);              // xrdy <= 0
         rdata = PEEK(XBUF);
 //        putchar(rdata);
     }
@@ -108,15 +109,14 @@ int PutData(uint16_t data)  {
     }
     PutChar(0x0d);   // CR
     for (i = 0; i < 2; ++i) {
-        POKE(XCSR, 128);
-        while (PEEK(XCSR) < 128);  // xstb == 1
-        POKE(XCSR, 0);
+        POKE(XCSR, 128);            // xrdy <= 1
+        while (PEEK(XCSR) < 128);   // xstb == 1
+        POKE(XCSR, 0);              // xrdy <= 0
         rdata = PEEK(XBUF);
 //        putchar(rdata);
     }
     return 0;
 }
-
 
 int LoadTape(void)
 {
@@ -154,8 +154,6 @@ int LoadTape(void)
         printf("L:%06o \n", length);
         if (length < 6) {
             break;
-        } else if ((length % 2) == 1) {
-            puts("Odd length");
         } else if (length == 6) {
             puts("Start");
             break;
@@ -209,13 +207,13 @@ int main(void)
     
     printf("Serial Start\n");
     cursor(1);
-    POKE(XCSR, 0);
+    POKE(XCSR, 0);                      // xrdy <= 0
     while (1) {
         if (PEEK(XCSR) >= 128) {        // xstb == 1
             POKE(XCSR, 0);              // xrdy <= 0
             rdata = PEEK(XBUF);
             putchar(rdata);
-        } else if (PEEK(RCSR) >= 128) {
+        } else if (PEEK(RCSR) >= 128) { // rstb == 1
             POKE(RBUF, wdata);
             POKE(RCSR, 0);              // rrdy <= 0
         } else if (kbhit()) {
