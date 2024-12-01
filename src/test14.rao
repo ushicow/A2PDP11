@@ -153,7 +153,7 @@
             <Expression>M1</Expression>
         </Expressions>
     </AoCore>
-    <AoCore index="1" sample_clock="clk" trig_type="0" storage_depth="2048" window_num="1" capture_amount="2048" implementation="0" trigger_pos="12" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="1" sample_clock="clk_x3" trig_type="0" storage_depth="2048" window_num="1" capture_amount="2048" implementation="0" trigger_pos="12" module_name="top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">clk</Signal>
             <Bus capture_enable="true" name="a[7:0]">
@@ -285,5 +285,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1110101010100000</GAO_ID>
+    <GAO_ID>1011100001010110</GAO_ID>
 </GAO_CONFIG>

@@ -67,13 +67,21 @@ parameter PRB           = 22'o17777552; // Paper Tape Reader Buffer Register
 parameter PPS           = 22'o17777554; // Paper Tape Punch Status Register
 parameter PPB           = 22'o17777556; // Paper Tape Punch Buffer Register
 
+// Switch Register
+parameter SWR           = 22'o17777570; // Switch Register
+
 parameter HIMEM         = 22'o17757777; // End of RAM
 
 // Apple II Register
-parameter A2RCSR        = 8'h00;         // Console out status; Read = rstb, Write = rrdy
-parameter A2RBUF        = 8'h01;         // Cousole out data
-parameter A2XCSR        = 8'h02;         // Console in status; Read = xstb, Write = xrdy  
-parameter A2XBUF        = 8'h03;         // Console in data
+parameter A2RCSR        = 8'h00;        // Console out status; Read = rstb, Write = rrdy
+parameter A2RBUF        = 8'h01;        // Cousole out data
+parameter A2XCSR        = 8'h02;        // Console in status; Read = xstb, Write = xrdy  
+parameter A2XBUF        = 8'h03;        // Console in data
+parameter A2PRS         = 8'h04;        // Paper Tape Reader status
+parameter A2PRB         = 8'h05;        // Paper Tape Reader buffer
+parameter A2PPS         = 8'h06;        // Paper Tape Punch status
+parameter A2PPB         = 8'h07;        // Paper Tape Punch buffer
+parameter A2HALT        = 8'h0f;
 
 logic clk_x3;   // clk x 3 = 54 MHz
 //Gowin_rPLL rpll(
@@ -133,13 +141,9 @@ end
 assign nxm_n = sctl_n ? 1'b1 :
     ((maio[2] == 0) && (mbs == BS_MEM) && (mdal > HIMEM)) ? 1'b0 :
     ((maio[2] == 0) && (mbs == BS_EXT) && 
-        ((mdal[21:3] != DLART) && (mdal[21:3] != PC11))) ? 1'b0 :
+        ((mdal[21:3] != DLART) && (mdal[21:3] != PC11) && (mdal != SWR))) ? 1'b0 :
     1'b1;
 
-logic [7:0] xbuf;
-logic [7:0] rbuf;
-logic xrdy;
-logic rrdy;
 logic [7:0] d0;
 assign d = rw ? d0 : 8'bz;
 
@@ -153,20 +157,27 @@ end
 logic dev_done;
 logic error;
 always_ff@(posedge clk_x3) begin
+    if (gp_code == 8'o014) begin
+        rrdy <= 0;
+        prs_rdy <= 0;
+    end
     if (devsel1) begin
         if (dev_done) begin;
-            if (rw) begin
+            if (rw) begin       // Write to Apple II bus
                 case (a[3:0])
                     A2RCSR : d0 <= {rstb, 7'b0};
                     A2XCSR : d0 <= {xstb, 7'b0};
                     A2XBUF : d0 <= xbuf;
+                    A2PRS  : d0 <= {prs_stb, 7'b0};
                 endcase
-            end else begin
+            end else begin      // Read from Apple II bus
                 case (a[3:0])
                     A2RCSR : rrdy <= d[7];
                     A2RBUF : rbuf <= d;
                     A2XCSR : xrdy <= d[7];
-                    8'h0f  : error <= 1'b1;
+                    A2PRS  : prs_rdy <= d[7];
+                    A2PRB  : prb <= d;
+                    A2HALT : error <= 1'b1;
                 endcase
             end
             dev_done <= 1'b0;
@@ -179,6 +190,8 @@ end
 
 logic xdone;
 logic xstb;
+logic [7:0] xbuf;
+logic xrdy;
 always_ff@(posedge clk_x3) begin
     if (gp_code == 8'o014) begin
         xdone <= 1'b1;
@@ -196,17 +209,64 @@ end
 
 logic rdone;
 logic rstb;
+logic [7:0] rbuf;
+logic rrdy;
+logic [1:0] rcs_stat;
+always_ff@(posedge clk_x3) begin
+    if (mdal == gp_code == 8'o014) begin
+        rdone <= 1'b0;
+        rstb <= 1'b0;
+        rcs_stat <= 0;
+    end else if (rcs_stat == 0) begin
+        if (rrdy) begin
+            rstb <= 1'b1;
+            rcs_stat <= 1;
+        end
+    end else if (rcs_stat == 1) begin
+        if (!rrdy) begin
+            rstb <= 1'b0;
+            rdone <= 1'b1;
+            rcs_stat <= 2;
+        end
+    end else if (rcs_stat == 2) begin
+        if (mdal == RBUF) begin
+            rdone <= 1'b0;
+            rcs_stat <= 0;
+        end
+    end
+end
+
+logic prs_done;
+logic prs_stb;
+logic [7:0] prb;
+logic prs_rdy;
+logic [1:0] prs_stat;
 always_ff@(posedge clk_x3) begin
     if (gp_code == 8'o014) begin
-        rdone <= 1'b0;
-        rstb <= 1'b0;
-    end else if (rrdy) begin
-        rstb <= 1'b1;
-    end else if (rstb) begin
-        rstb <= 1'b0;
-        rdone <= 1'b1;
-    end else if (mdal == RBUF) begin
-        rdone <= 1'b0;
+        prs_done <= 1'b0;
+        prs_stb <= 1'b0;
+        prs_stat <= 0;
+    end else if ((mdal == PRS) && (maio[3] == 0) && (!sctl_n)) begin
+        if (dal[0]) begin
+            prs_done <= 1'b0;
+            prs_stb <= 1'b0;
+            prs_stat <= 0;
+        end
+    end else if (prs_stat == 0) begin
+        if (prs_rdy) begin
+            prs_stb <= 1'b1;
+            prs_stat <= 1;
+        end
+    end else if (prs_stat == 1) begin
+        if (!prs_rdy) begin
+            prs_stb <= 1'b0;
+            prs_done <= 1'b1;
+        end
+    end else if (prs_stat == 2) begin
+        if (mdal == PRB) begin
+            prs_done <= 1'b0;
+            prs_stat <= 0;
+        end
     end
 end
 
@@ -214,8 +274,8 @@ assign dal = bufctl_n ? 16'bz :
     (mdal == RCSR) ? {8'b0, rdone, 7'b0} :
     (mdal == XCSR) ? {8'b0, xdone, 7'b0} :
     (mdal == RBUF) ? {8'b0, rbuf} :
-    (mdal == PRS) ? 16'b1000_0000_0000_0000 :
-    (mdal == PRB) ? 16'b0 :
+    (mdal == PRS) ? {8'b0, prs_done, 7'b0}:
+    (mdal == PRB) ? {8'b0, prb} :
     (mdal == PPS) ? 16'b0000_0000_1000_0000 :
     (gp_code == POWER_UP0) ? 16'b0000000_0_0000_0_01_1 :
     (gp_code == POWER_UP2) ? 16'b0000000_0_0000_0_01_1 :
