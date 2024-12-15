@@ -109,12 +109,19 @@
                     </Bus>
                 </SignalList>
             </Trigger>
-            <Trigger index="1"/>
+            <Trigger index="1">
+                <SignalList>
+                    <Signal>nxm_n</Signal>
+                </SignalList>
+            </Trigger>
             <Trigger index="2">
                 <SignalList>
                     <Signal>prs_done</Signal>
                     <Signal>prs_stb</Signal>
                     <Signal>prs_rdy</Signal>
+                    <Signal>xdone</Signal>
+                    <Signal>xstb</Signal>
+                    <Signal>xrdy</Signal>
                 </SignalList>
             </Trigger>
             <Trigger index="3"/>
@@ -133,8 +140,8 @@
         </Triggers>
         <MatchUnits>
             <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="0000000000001100" value1="0000000000000000" trigger="0"/>
-            <MatchUnit index="1" enabled="0" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="R" value1="0" trigger="1"/>
-            <MatchUnit index="2" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="XXX" value1="000" trigger="2"/>
+            <MatchUnit index="1" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="R" value1="0" trigger="1"/>
+            <MatchUnit index="2" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="XXXXRX" value1="000000" trigger="2"/>
             <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="4" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="5" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
@@ -151,8 +158,9 @@
         </MatchUnits>
         <Expressions type="Dynamic" ex_implementation="1">
             <Expression>M0</Expression>
+            <Expression>M1</Expression>
             <Expression>M2</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1000101001111001</GAO_ID>
+    <GAO_ID>1010011000001100</GAO_ID>
 </GAO_CONFIG>

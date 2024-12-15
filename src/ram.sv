@@ -65,8 +65,6 @@ assign cmd_en1 = 1'b0;
 assign addr1 = 21'b0;
 assign wr_data1 = 32'b0;
 assign data_mask1 = 4'b0;
-logic clk2;
-assign clk_out = clk2;
 
 PSRAM_Memory_Interface_HS_2CH_V2_Top psram(
     .clk_d(clk_d), //input clk_d
@@ -82,7 +80,7 @@ PSRAM_Memory_Interface_HS_2CH_V2_Top psram(
     .O_psram_cs_n(O_psram_cs_n), //output [1:0] O_psram_cs_n
     .init_calib0(init_calib0), //output init_calib0
     .init_calib1(init_calib1), //output init_calib1
-    .clk_out(clk2), //output clk_out
+    .clk_out(clk_out), //output clk_out
     .cmd0(cmd0), //input cmd0
     .cmd1(cmd1), //input cmd1
     .cmd_en0(cmd_en0), //input cmd_en0

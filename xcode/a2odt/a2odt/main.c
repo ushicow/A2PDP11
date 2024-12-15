@@ -38,6 +38,7 @@ FILE *SetTape(void)
         }
         fseek(tape, 0, SEEK_SET);
         fseek(tape, c, SEEK_SET);
+        POKE(PRS, 0);
     }
     return tape;
 }
@@ -59,12 +60,12 @@ int ReadTape(FILE *tape)
                 break;
             }
         }
-//        printf("%03o\n", c);
         POKE(PRB, c);
         POKE(PRS, 0);
     } else {
         puts("end of tape");
         fclose(tape);
+        POKE(PRS, 64);
         ret = 1;
     }
     return ret;
@@ -83,7 +84,9 @@ int main(void)
         if (PEEK(XCSR) >= 128) {    // xstb == 1
             POKE(XCSR, 0);          // xrdy <= 0
             rdata = PEEK(XBUF);
-            putchar(rdata);
+            if (rdata != 0x0a) {
+                putchar(rdata);
+            }
         } else if (PEEK(RCSR) >= 128) { // rstb == 1
             POKE(RBUF, wdata);
             POKE(RCSR, 0);          // rrdy <= 0

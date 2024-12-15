@@ -175,7 +175,10 @@ always_ff@(posedge clk_x3) begin
                     A2RCSR : rrdy <= d[7];
                     A2RBUF : rbuf <= d;
                     A2XCSR : xrdy <= d[7];
-                    A2PRS  : prs_rdy <= d[7];
+                    A2PRS  : begin
+                                prs_rdy <= d[7];
+                                prs_err <= d[6];
+                             end
                     A2PRB  : prb <= d;
                     A2HALT : error <= 1'b1;
                 endcase
@@ -241,6 +244,7 @@ logic prs_stb;
 logic [7:0] prb;
 logic prs_rdy;
 logic [1:0] prs_stat;
+logic prs_err;
 always_ff@(posedge clk_x3) begin
     if (gp_code == 8'o014) begin
         prs_done <= 1'b0;
@@ -261,6 +265,7 @@ always_ff@(posedge clk_x3) begin
         if (!prs_rdy) begin
             prs_stb <= 1'b0;
             prs_done <= 1'b1;
+            prs_stat <= 2;
         end
     end else if (prs_stat == 2) begin
         if (mdal == PRB) begin
@@ -274,7 +279,7 @@ assign dal = bufctl_n ? 16'bz :
     (mdal == RCSR) ? {8'b0, rdone, 7'b0} :
     (mdal == XCSR) ? {8'b0, xdone, 7'b0} :
     (mdal == RBUF) ? {8'b0, rbuf} :
-    (mdal == PRS) ? {8'b0, prs_done, 7'b0}:
+    (mdal == PRS) ? {prs_err, 7'b0, prs_done, 7'b0}:
     (mdal == PRB) ? {8'b0, prb} :
     (mdal == PPS) ? 16'b0000_0000_1000_0000 :
     (gp_code == POWER_UP0) ? 16'b0000000_0_0000_0_01_1 :

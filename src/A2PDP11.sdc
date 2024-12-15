@@ -17,5 +17,7 @@ set_false_path -from [get_clocks {clk_out}] -to [get_clocks {clk_x3}]
 //set_false_path -from [get_clocks {clk_out}] -to [get_clocks {memory_clk}] 
 set_false_path -from [get_clocks {clk_d}] -to [get_clocks {memory_clk}] 
 set_multicycle_path -from [get_clocks {clk_out}] -to [get_clocks {memory_clk}]  -setup -end 2
+set_multicycle_path -from [get_clocks {clk_d}] -to [get_clocks {clk_out}]  -setup -end 4
+set_multicycle_path -from [get_clocks {clk_d}] -to [get_clocks {clk_out}]  -hold -end 4
 //set_multicycle_path -from [get_clocks {clk_d}] -to [get_clocks {clk_x2p}]  -setup -end 4
 //set_multicycle_path -from [get_clocks {clk_d}] -to [get_clocks {clk_x2p}]  -hold -end 4
